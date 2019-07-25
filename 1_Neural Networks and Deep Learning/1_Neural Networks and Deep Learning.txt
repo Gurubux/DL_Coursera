@@ -1,0 +1,102 @@
+NEURAL NETWORKS AND DEEP LEARNING
+************************************************************************************************************************************************************
+INTRODUCTION TO DEEP LEARNING
+	WHAT IS A NEURAL NETWORK?
+	SUPERVISED LEARNING WITH NEURAL NETWORKS
+	WHY IS DEEP LEARNING TAKING OFF?
+	ABOUT THIS COURSE
+
+READING: READINGFREQUENTLY ASKED QUESTIONS
+
+PRACTICE QUESTIONS
+	QUIZ: INTRODUCTION TO DEEP LEARNING
+
+HEROES OF DEEP LEARNING 
+	VIDEO: LECTUREGEOFFREY HINTON INTERVIEW
+
+************************************************************************************************************************************************************
+NEURAL NETWORKS BASICS
+Logistic Regression as a Neural Network
+	Binary Classification
+	Logistic Regression
+	Logistic Regression Cost Function
+	Gradient Descent
+	Derivatives
+	More Derivative Examples
+	Computation graph
+	Derivatives with a Computation Graph
+	Logistic Regression Gradient Descent
+	Gradient Descent on m Examples
+
+Python and Vectorization
+	Vectorization
+	More Vectorization Examples
+	Vectorizing Logistic Regression
+	Vectorizing Logistic Regression`s Gradient Output
+	Broadcasting in Python
+	A note on python/numpy vectors
+	Quick tour of Jupyter/iPython Notebooks
+	Explanation of logistic regression cost function 
+
+
+Practice Questions
+	Quiz: Neural Network Basics
+
+Programming Assignments
+	Reading: ReadingDeep Learning Honor Code
+	Reading: ReadingProgramming Assignment FAQ
+	Notebook: Python Basics with numpy 
+	Practice Programming Assignment: Python Basics with numpy 
+	Notebook: Logistic Regression with a Neural Network mindset
+	@Programming Assignment: Logistic Regression with a Neural Network mindset
+
+Heroes of Deep Learning -
+	Pieter Abbeel interview
+
+
+************************************************************************************************************************************************************
+SHALLOW NEURAL NETWORKS
+
+Shallow Neural Network
+	Neural Networks Overview
+	Neural Network Representation
+	Computing a Neural Network`s Output
+	Vectorizing across multiple examples
+	Explanation for Vectorized Implementation
+	Activation functions
+	Why do you need non-linear activation functions?
+	Derivatives of activation functions
+	Gradient descent for Neural Networks
+	Backpropagation intuition 
+	Random Initialization
+
+Practice Questions
+	Quiz: Shallow Neural Networks
+
+Programming Assignment
+	Notebook: Planar data classification with a hidden layer
+	@Programming Assignment: Planar data classification with a hidden layer
+
+Heroes of Deep Learning 
+	Ian Goodfellow interview
+
+************************************************************************************************************************************************************
+DEEP NEURAL NETWORKS
+Deep Neural Network
+	Deep L-layer neural network
+	Forward Propagation in a Deep Network
+	Getting your matrix dimensions right
+	Why deep representations?
+	Building blocks of deep neural networks
+	Forward and Backward Propagation
+	Parameters vs Hyperparameters
+	What does this have to do with the brain?
+
+Practice Questions
+	Quiz: Key concepts on Deep Neural Networks
+
+Programming Assignments
+	Notebook: Building your Deep Neural Network: Step by Step
+	@Programming Assignment: Building your deep neural network: Step by Step
+	Notebook: Deep Neural Network - Application
+	@Programming Assignment: Deep Neural Network Application
