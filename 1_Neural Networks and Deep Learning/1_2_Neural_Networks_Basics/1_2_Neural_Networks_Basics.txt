@@ -1,0 +1,51 @@
+************************************************************************************************************************************************************
+NEURAL NETWORKS BASICS
+Vectorization
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+Logistic Regression as a Neural Network
+	Binary Classification
+	Logistic Regression
+	Logistic Regression Cost Function
+	Gradient Descent
+	Derivatives
+	More Derivative Examples
+		 - Derivative just means slope of a line.
+		 - The slope of a function can be different at different points on the function. 
+		 	In our first example where f(a) = 3a those a straight line. The derivative was the "same" everywhere, it was three everywhere. 
+		 	For other functions like   f(a) = a² or f(a) = log(a), the slope of the line "varies". So, the slope or the derivative can be different at different points on the curve.
+
+	Computation graph
+		The computations of a neural network are organized in terms of a forward pass or a forward propagation step, in which we compute the output of the neural network, followed by a backward pass or back propagation step, which we use to compute gradients or compute derivatives. The computation graph explains why it is organized this way.
+		Through a "left-to-right" pass, you can compute the value of J and what we`ll see in the next couple of slides is that in order to compute derivatives there`ll be a right-to-left pass like this, kind of going in the opposite direction as the blue arrows. That would be most natural for computing the derivatives. So to recap, the computation graph organizes a computation with this blue arrow, left-to-right computation. Let's refer to the next video how you can do the backward red arrow right-to-left computation of the derivatives. 
+	Derivatives with a Computation Graph
+		In this class, what does the coding convention "dvar" represent?
+			The derivative of a final output variable with respect to various intermediate quantities.
+
+			
+	Logistic Regression Gradient Descent
+	Gradient Descent on m Examples
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+Python and Vectorization
+	Vectorization
+	More Vectorization Examples
+	Vectorizing Logistic Regression
+	Vectorizing Logistic Regression`s Gradient Output
+	Broadcasting in Python
+	A note on python/numpy vectors
+	Quick tour of Jupyter/iPython Notebooks
+	Explanation of logistic regression cost function 
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+Practice Questions
+	Quiz: Neural Network Basics
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+Programming Assignments
+	Reading: ReadingDeep Learning Honor Code
+	Reading: ReadingProgramming Assignment FAQ
+	Notebook: Python Basics with numpy 
+	Practice Programming Assignment: Python Basics with numpy 
+	Notebook: Logistic Regression with a Neural Network mindset
+	@Programming Assignment: Logistic Regression with a Neural Network mindset
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+Heroes of Deep Learning -
+	Pieter Abbeel interview
