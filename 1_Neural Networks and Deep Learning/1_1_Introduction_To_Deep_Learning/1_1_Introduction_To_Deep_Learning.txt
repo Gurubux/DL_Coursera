@@ -56,4 +56,5 @@ RelU
 Capsules
 	 So I think we should beat this extra structure. And then the other idea that goes with that. >> So this means in the truth of the representation, you partition the representation. >> Yes. >> To different subsets. >> Yes. >> To represent, right, rather than- >>I call each of those subsets a capsule. >> I see. >> And the idea is a capsule is able to represent an instance of a feature, but only one. And it represents all the different properties of that feature. It`s a feature that has a lot of properties as opposed to a normal neuron and normal neural nets, which has just one scale of property.
 
-Generative Adversarial Nets - (GANs) are one of the sort of biggest ideas in deep learning that's really new.
+Generative Adversarial Nets - (GANs) are one of the sort of biggest ideas in deep learning that`s really new.
+What happened to sparsity and slow features, which were two of the other principles for building unsupervised models?

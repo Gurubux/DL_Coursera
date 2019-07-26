@@ -1,0 +1,20 @@
+************************************************************************************************************************************************************
+DEEP NEURAL NETWORKS
+Deep Neural Network
+	Deep L-layer neural network
+	Forward Propagation in a Deep Network
+	Getting your matrix dimensions right
+	Why deep representations?
+	Building blocks of deep neural networks
+	Forward and Backward Propagation
+	Parameters vs Hyperparameters
+	What does this have to do with the brain?
+
+Practice Questions
+	Quiz: Key concepts on Deep Neural Networks
+
+Programming Assignments
+	Notebook: Building your Deep Neural Network: Step by Step
+	@Programming Assignment: Building your deep neural network: Step by Step
+	Notebook: Deep Neural Network - Application
+	@Programming Assignment: Deep Neural Network Application

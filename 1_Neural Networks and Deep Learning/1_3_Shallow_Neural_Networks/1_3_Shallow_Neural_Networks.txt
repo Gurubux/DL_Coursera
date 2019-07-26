@@ -1,0 +1,25 @@
+************************************************************************************************************************************************************
+SHALLOW NEURAL NETWORKS
+
+Shallow Neural Network
+	Neural Networks Overview
+	Neural Network Representation
+	Computing a Neural Network`s Output
+	Vectorizing across multiple examples
+	Explanation for Vectorized Implementation
+	Activation functions
+	Why do you need non-linear activation functions?
+	Derivatives of activation functions
+	Gradient descent for Neural Networks
+	Backpropagation intuition 
+	Random Initialization
+
+Practice Questions
+	Quiz: Shallow Neural Networks
+
+Programming Assignment
+	Notebook: Planar data classification with a hidden layer
+	@Programming Assignment: Planar data classification with a hidden layer
+
+Heroes of Deep Learning 
+	Ian Goodfellow interview
