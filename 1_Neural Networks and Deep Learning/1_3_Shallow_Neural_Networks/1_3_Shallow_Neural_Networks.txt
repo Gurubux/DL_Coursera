@@ -23,3 +23,146 @@ Programming Assignment
 
 Heroes of Deep Learning 
 	Ian Goodfellow interview
+******************************************************************************************************************************************************
+Shallow Neural Network
+NEURAL NETWORKS OVERVIEW
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+NEURAL NETWORK REPRESENTATION
+A also stands for activations, and it refers to the values that different layers of the neural network are passing on to the subsequent layers. 
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+COMPUTING A NEURAL NETWORK`S OUTPUT
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+VECTORIZING ACROSS MULTIPLE EXAMPLES
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+EXPLANATION FOR VECTORIZED IMPLEMENTATION
+---------------------------------------------------------------------------------------------------------------------------------------------
+ACTIVATION FUNCTIONS
+Sigmoid, tanh, Relu(Rectified Linear Unit) , Leaky_RelU
+	Sigmoid (z) = 1 / ( 1 + exp(-z)) - Use only For output layer
+			when z is positive, Sigmoid(z) = 0.5 > Sigmoid(z) > 1
+			when z is negative, Sigmoid(z) = 0 	 < Sigmoid(z) < 0.5
+			when z is 0		  , Sigmoid(z) = 0.5
+
+
+	tanh (z) = exp(z) - exp(-z) /  exp(z)  + exp(-z)
+			when z is positive, tanh(z) = positive
+			when z is negative, tanh(z) = negative
+			when z is 0		  , tanh(z) = 0
+
+
+
+	Relu (z) = max(0,z)
+			when z is positive, Relu(z) = z
+			when z is negative, Relu(z) = 0
+			when z is 0		  , ReLU(z)	= 0.00000000000000
+
+
+	Leaky_RelU() = max(0,z)
+			when z is positive, Relu(z) = z
+			when z is negative, Relu(z) = 0.01z
+			when z is 0		  , ReLU(z)	= 0.00000000000000		
+
+RULES OF THUMB FOR CHOOSING ACTIVATION FUNCTIONS.
+	- If your output is 0, 1 value, If you`re using binary classification, then the sigmoid activation function is a very natural choice For the output layer. And then For all other unit`s ReLU, or the rectified linear unit, Is increasingly the default choice of activation function. 
+	- So If you`re not sure what to use For your hidden layer, I would just use the "ReLU" activation function.
+
+The advantage of both the ReLU and the leaky ReLU is that for a lot of the space of Z, the derivative of the activation function, the slope of the activation function is very different from 0.  And so in practice, using the ReLU activation function, your neural network will often learn much faster than when using the tanh or the sigmoid activation function. And the main reason is that there is less of these effects of the slope of the function going to 0, which slows down learning.  And I know that for half of the range of z, the slope of ReLU is 0, but in practice, enough of your hidden units will have z greater than 0. So learning can still be quite fast for most training examples. 
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+WHY DO YOU NEED NON-LINEAR ACTIVATION FUNCTIONS?
+---------------------------------------------------------------------------------------------------------------------------------------------
+DERIVATIVES OF ACTIVATION FUNCTIONS
+If activation function Is g(z) then its derivative can be denoted as " g`(z) "
+
+g(z) |	sigmoid(z) 			|		        tanh(z)					|			max(0,z)		|  max(0.01z , z )		|
+	 |						|										|							|						|
+	 |	1 / (1 + exp(-z))	|exp(z) - exp(-z) /  exp(z)  + exp(-z)  |							|						|
+-------------------------------------------------------------------------------------------------------------------------
+g`(z)|	g(z)(1-g(z))		|			1 - g(z) ^ 2				|	1 if z >= 0 else 0		|1 if z>=0 else 0.01	|	
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+GRADIENT DESCENT FOR NEURAL NETWORKS
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+BACKPROPAGATION INTUITION 
+---------------------------------------------------------------------------------------------------------------------------------------------
+RANDOM INITIALIZATION
+Symmetry breaking problem
+Cannot initialize weights to 0
+
+Logistic regression’s weights w should be initialized randomly rather than to all zeros, because if you initialize to all zeros, then logistic regression will fail to learn a useful decision boundary because it will fail to “break symmetry”
+
+
+No, Logistic Regression doesn`t have a hidden layer. If you initialize the weights to zeros, the first example x fed in the logistic regression will output zero but the derivatives of the Logistic Regression depend on the input x (because there`s no hidden layer) which is not zero. So at the second iteration, the weights values follow x`s distribution and are different from each other if x is not a constant vector.
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Practice Questions
+	Quiz: Shallow Neural Networks
+
+Programming Assignment
+By completing this assignment you will:
+- Develop an intuition of back-propagation and see it work on data.
+- Recognize that the more hidden layers you have the more complex structure you could capture.
+- Build all the helper functions to implement a full model with one hidden layer.
+
+	Notebook: Planar data classification with a hidden layer
+	@Programming Assignment: Planar data classification with a hidden layer
+	- Implement a 2-class classification neural network with a single hidden layer
+	- Use units with a non-linear activation function, such as tanh
+	- Compute the cross entropy loss
+	- Implement forward and backward propagation
+
+Interpretation: The dataset is not linearly separable, so logistic regression doesn't perform well. Hopefully a neural network will do better. 
+
+The general methodology to build a Neural Network is to:
+
+1. Define the neural network structure ( # of input units,  # of hidden units, etc). 
+2. Initialize the model`s parameters
+3. Loop:
+    - Implement forward propagation
+    - Compute loss
+    - Implement backward propagation to get the gradients
+    - Update parameters (gradient descent)
+You often build helper functions to compute steps 1-3 and then merge them into one function we call nn_model(). Once you`ve built nn_model() and learnt the right parameters, you can make predictions on new data.
+---------------------------------------------------------------------------------------------------------------------------------------------
+Heroes of Deep Learning 
+	Ian Goodfellow interview

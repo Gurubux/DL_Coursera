@@ -204,3 +204,4 @@ You`ve implemented several functions that:
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 Heroes of Deep Learning -
 	Pieter Abbeel interview
+	Deep Reinforcement Learning
