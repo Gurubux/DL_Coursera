@@ -215,6 +215,9 @@ def model(X, Y, learning_rate = 0.01, num_iterations = 15000, print_cost = True,
 \4 - He initialization
 ------------------------------------------------------------------------------------------------
 \2 - Zero initialization
+"https://github.com/Gurubux/DL_Coursera/blob/master/2_Improving_Deep_NN_HyperparamTun_Reg_and_Opt/2_1_Practical_Aspects_Of_Deep_Learning/Model_with_Zero_Initialization.png"
+"https://github.com/Gurubux/DL_Coursera/blob/master/2_Improving_Deep_NN_HyperparamTun_Reg_and_Opt/2_1_Practical_Aspects_Of_Deep_Learning/Model_with_Zero_Initialization_cost.png"
+
 There are two types of parameters to initialize in a neural network:
 	the weight matrices  (W[1],W[2],W[3],...,W[L−1],W[L])
 	the bias vectors  (b[1],b[2],b[3],...,b[L−1],b[L])
@@ -320,6 +323,9 @@ The model is predicting 0 for every example.
 	- It is however okay to initialize the biases  b[l]  to zeros. Symmetry is still broken so long as  W[l] is initialized randomly.  
 ------------------------------------------------------------------------------------------------
 \3 - Random INITIALIZATION
+"https://github.com/Gurubux/DL_Coursera/blob/master/2_Improving_Deep_NN_HyperparamTun_Reg_and_Opt/2_1_Practical_Aspects_Of_Deep_Learning/Model_with_Random_Large_Initialization.png"
+"https://github.com/Gurubux/DL_Coursera/blob/master/2_Improving_Deep_NN_HyperparamTun_Reg_and_Opt/2_1_Practical_Aspects_Of_Deep_Learning/Model_with_Random_Large_Initialization_cost.png"
+
 To break symmetry, lets intialize the weights randomly. Following random initialization, each neuron can then proceed to learn a different function of its inputs. In this exercise, you will see what happens if the weights are intialized randomly, but to very large values.
 
 Exercise: Implement the following function to initialize your weights to large random values (scaled by *10) and your biases to zeros. Use np.random.randn(..,..) * 10 for weights and np.zeros((.., ..)) for biases. We are using a fixed np.random.seed(..) to make sure your "random" weights match ours, so don't worry if running several times your code gives you always the same initial values for the parameters.
@@ -411,6 +417,8 @@ If you train this network longer you will see better results, but initializing w
 
 ------------------------------------------------------------------------------------------------
 \4 - He INITIALIZATION
+"https://github.com/Gurubux/DL_Coursera/blob/master/2_Improving_Deep_NN_HyperparamTun_Reg_and_Opt/2_1_Practical_Aspects_Of_Deep_Learning/Model_with_HE_Large_Initialization.png"
+"https://github.com/Gurubux/DL_Coursera/blob/master/2_Improving_Deep_NN_HyperparamTun_Reg_and_Opt/2_1_Practical_Aspects_Of_Deep_Learning/Model_with_HE_Large_Initialization_cost.png"
 
 Finally, Try "He Initialization"; this is named For the first author of He et al., 2015. (If you have heard of "Xavier initialization", this is similar except Xavier initialization uses a scaling factor For the weights  W[l]  of 
 	sqrt(1./layers_dims[l-1]) 
