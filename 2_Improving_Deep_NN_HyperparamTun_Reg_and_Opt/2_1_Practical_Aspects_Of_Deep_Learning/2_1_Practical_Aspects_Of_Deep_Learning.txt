@@ -1048,7 +1048,6 @@ Congratulations for finishing this assignment! And also for revolutionizing Fren
 
 ------------------------------------------------------------------------------------------------------------------------
 What we want you to remember from this notebook:
-
 	- Regularization will help you reduce overfitting.
 	- Regularization will drive your weights to lower values.
 	- L2 regularization and Dropout are two very effective regularization techniques.
@@ -1057,12 +1056,179 @@ What we want you to remember from this notebook:
 
 *********************************************************************************************
 NOTEBOOK: GRADIENT CHECKING
+Welcome to the final assignment for this week! In this assignment you will learn to implement and use gradient checking.
+
+You are part of a team working to make mobile payments available globally, and are asked to build a deep learning model to detect fraud--whenever someone makes a payment, you want to see if the payment might be fraudulent, such as if the user`s account has been taken over by a hacker.
+
+But backpropagation is quite challenging to implement, and sometimes has bugs. Because this is a mission-critical application, your company`s CEO wants to be really certain that your implementation of backpropagation is correct. Your CEO says, "Give me a proof that your backpropagation is actually working!" To give this reassurance, you are going to use "gradient checking".
+
+\1) How does gradient checking work?
+\2) 1-dimensional gradient checking
+\3) N-dimensional gradient checking
 
 
 
+------------------------------------------------------------------------------------------------------------------------
+\1) How does gradient checking work?
+Backpropagation computes the gradients  ∂/∂θ (J) , where  θ denotes the parameters of the model.  J is computed using forward propagation and your loss function.
+
+Because forward propagation is relatively easy to implement, you`re confident you got that right, and so you`re almost 100% sure that you`re computing the cost J correctly. Thus, you can use your code for computing  J to verify the code for computing  ∂/∂θ (J) .
+
+Let`s look back at the definition of a derivative (or gradient):
+∂/∂θ (J) = lim   J(θ+ε)−J(θ−ε) / 2ε												...... (1)
+		  ε → 0
+If you`re not familiar with the " limε→0 " notation, it`s just a way of saying "when  ε  is really really small."
+
+We know the following:
+	- ∂/∂θ (J)  is what you want to make sure you`re computing correctly.
+	- You can compute  J(θ+ε) and J(θ−ε) (in the case that θ is a real number), since you`re confident your implementation For J is correct.
+
+Lets use equation (1) and a small value for  ε to convince your CEO that your code for computing  ∂/∂θ (J)  is correct!
 
 
+------------------------------------------------------------------------------------------------------------------------
+\2) 1-dimensional gradient checking
 
+Consider a 1D linear function  J(θ)=θx . The model contains only a single real-valued parameter θ , and takes  x  as input.
+
+You will implement code to compute  J(.) and its derivative  ∂/∂θ (J) . You will then use gradient checking to make sure your derivative computation For  J is correct.
+"https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/2_Improving_Deep_NN_HyperparamTun_Reg_and_Opt/2_1_Practical_Aspects_Of_Deep_Learning/Gradient_Checking/1D_linear_model.png"
+
+The diagram above shows the key computation steps: 
+	- First start with  x 
+	- Then evaluate the function J(x)  ("forward propagation"). 
+	- Then compute the derivative ∂/∂θ (J)  ("backward propagation").
+-----------------------------------------------
+-----------------------------------------------
+Exercise: implement "forward propagation" and "backward propagation" for this simple function. I.e., compute both  J(.)  ("forward propagation") and its derivative with respect to θ  ("backward propagation"), in two separate functions.
+
+# GRADED FUNCTION: forward_propagation
+
+def forward_propagation(x, theta):
+    """
+    Implement the linear forward propagation (compute J) presented in Figure 1 (J(theta) = theta * x)
+    
+    Arguments:
+    x -- a real-valued input
+    theta -- our parameter, a real number as well
+    
+    Returns:
+    J -- the value of function J, computed using the formula J(theta) = theta * x
+    """
+    
+    ### START CODE HERE ### (approx. 1 line)
+    J = theta * x
+    ### END CODE HERE ###
+    
+    return J
+x, theta = 2, 4
+J = forward_propagation(x, theta)
+print ("J = " + str(J))
+>>> J = 8
+
+-----------------------------------------------
+-----------------------------------------------
+Exercise: Now, implement the backward propagation step (derivative computation) of Figure 1. That is, compute the derivative of  J(θ)=θx  with respect to θ . To save you From doing the calculus, you should get  dtheta= ∂/∂θ (J) = x
+# GRADED FUNCTION: backward_propagation
+
+def backward_propagation(x, theta):
+    """
+    Computes the derivative of J with respect to theta (see Figure 1).
+    
+    Arguments:
+    x -- a real-valued input
+    theta -- our parameter, a real number as well
+    
+    Returns:
+    dtheta -- the gradient of the cost with respect to theta
+    """
+    
+    ### START CODE HERE ### (approx. 1 line)
+    dtheta = x
+    ### END CODE HERE ###
+    
+    return dtheta
+x, theta = 2, 4
+dtheta = backward_propagation(x, theta)
+print ("dtheta = " + str(dtheta))
+dtheta = 2
+
+-----------------------------------------------
+-----------------------------------------------
+Exercise: To show that the backward_propagation() function is correctly computing the gradient  ∂/∂θ (J) , let`s implement gradient checking.
+
+Instructions:
+
+- First compute "gradapprox" using the formula above (1) and a small value of  εε . Here are the Steps to follow:
+	1. θ⁺ 		  = θ + ε 
+	2. θ⁻ 		  = θ − ε 
+	3. J⁺ 		  = J(θ⁺)
+	4. J⁻ 		  = J(θ⁻)
+	5. gradapprox = ( J⁺ - J⁻ )/ 2ε
+
+- Then compute the gradient using backward propagation, and store the result in a variable "grad"
+
+- Finally, compute the relative difference between "gradapprox" and the "grad" using the following formula:
+							∣∣grad−gradapprox∣∣₂
+			difference =  ______________________							.......(2)
+						∣∣grad∣∣₂ + ∣∣gradapprox∣∣₂
+ 
+
+
+You will need 3 Steps to compute this formula:
+	1`. compute the numerator using np.linalg.norm(...)
+	2`. compute the denominator. You will need to call np.linalg.norm(...) twice.
+	3`. divide them.
+
+If this difference is small (say less than  10⁻⁷ ), you can be quite confident that you have computed your gradient correctly. Otherwise, there may be a mistake in the gradient computation.
+
+# GRADED FUNCTION: gradient_check
+
+def gradient_check(x, theta, epsilon = 1e-7):
+    """
+    Implement the backward propagation presented in Figure 1.
+    
+    Arguments:
+    x -- a real-valued input
+    theta -- our parameter, a real number as well
+    epsilon -- tiny shift to the input to compute approximated gradient with formula(1)
+    
+    Returns:
+    difference -- difference (2) between the approximated gradient and the backward propagation gradient
+    """
+    
+    # Compute gradapprox using left side of formula (1). epsilon is small enough, you don't need to worry about the limit.
+    ### START CODE HERE ### (approx. 5 lines)
+    thetaplus = theta + epsilon                               # Step 1
+    thetaminus = theta - epsilon                              # Step 2
+    J_plus = forward_propagation(x, thetaplus)                # Step 3
+    J_minus = forward_propagation(x, thetaminus)              # Step 4
+    gradapprox = ( J_plus - J_minus )/ (2 * epsilon)           # Step 5
+    ### END CODE HERE ###
+    
+    # Check if gradapprox is close enough to the output of backward_propagation()
+    ### START CODE HERE ### (approx. 1 line)
+    grad = backward_propagation(x, theta)
+    ### END CODE HERE ###
+    
+    ### START CODE HERE ### (approx. 1 line)
+    numerator = np.linalg.norm(grad - gradapprox)                     # Step 1`
+    denominator = np.linalg.norm(grad) + np.linalg.norm(gradapprox)   # Step 2`
+    difference = numerator / denominator                              # Step 3`
+    ### END CODE HERE ###
+    
+    if difference < 1e-7:
+        print ("The gradient is correct!")
+    else:
+        print ("The gradient is wrong!")
+    
+    return difference
+
+x, theta = 2, 4
+difference = gradient_check(x, theta)
+print("difference = " + str(difference))
+------------------------------------------------------------------------------------------------------------------------
+\3) N-dimensional gradient checking
 
 
 
