@@ -1,0 +1,13 @@
+OPTIMIZATION ALGORITHMS
+2.1	Mini-batch gradient descent
+2.2	Understanding mini-batch gradient descent
+2.3	Exponentially weighted averages
+2.4	Understanding exponentially weighted averages
+2.5	Bias correction in exponentially weighted averages
+2.6	Gradient descent with momentum
+2.7	RMSprop
+2.8	Adam optimization algorithm
+2.9	Learning rate decay
+2.10 The problem of local optimaNotebook: Optimization
+
+Video: Yuanqing Lin interview
