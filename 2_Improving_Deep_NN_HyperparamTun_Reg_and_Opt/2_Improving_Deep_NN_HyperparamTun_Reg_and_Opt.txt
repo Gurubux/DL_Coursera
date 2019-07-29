@@ -1,0 +1,53 @@
+PRACTICAL ASPECTS OF DEEP LEARNING
+1.1	Train / Dev / Test sets
+1.2	Bias / Variance
+1.3	Basic Recipe for Machine Learning
+1.4	Regularization
+1.5	Why regularization reduces overfitting?
+1.6	Dropout Regularization
+1.7	Understanding Dropout
+1.8	Other regularization methods
+1.9	Normalizing inputs
+1.10 Vanishing / Exploding gradients
+1.11 Weight Initialization for Deep Networks
+1.12 Numerical approximation of gradients
+1.13 Gradient checking
+1.14 Gradient Checking Implementation Notes
+
+Notebook: Initialization
+Notebook: Regularization
+Notebook: Gradient Checking
+Video: Yoshua Bengio interview
+
+OPTIMIZATION ALGORITHMS
+2.1	Mini-batch gradient descent
+2.2	Understanding mini-batch gradient descent
+2.3	Exponentially weighted averages
+2.4	Understanding exponentially weighted averages
+2.5	Bias correction in exponentially weighted averages
+2.6	Gradient descent with momentum
+2.7	RMSprop
+2.8	Adam optimization algorithm
+2.9	Learning rate decay
+2.10 The problem of local optimaNotebook: Optimization
+
+Video: Yuanqing Lin interview
+
+
+HYPERPARAMETER TUNING, BATCH NORMALIZATION AND PROGRAMMING FRAMEWORKS
+3.1. Tuning process
+3.2. Using an appropriate scale to pick hyperparameters
+3.3. Hyperparameters tuning in practice: Pandas vs. Caviar
+3.4. Normalizing activations in a network
+3.5. Fitting Batch Norm into a neural network
+3.6. Why does Batch Norm work?
+3.7. Batch Norm at test time
+3.8. Softmax Regression
+3.9. Training a softmax classifier
+3.10. Deep learning frameworks
+3.11. TensorFlow
+
+Notebook: Tensorflow
+
+Graded: Hyperparameter tuning, Batch Normalization, Programming Frameworks
+Graded: Tensorflow
