@@ -1,15 +1,19 @@
 HYPERPARAMETER TUNING, BATCH NORMALIZATION AND PROGRAMMING FRAMEWORKS
-3.1. Tuning process
-3.2. Using an appropriate scale to pick hyperparameters
-3.3. Hyperparameters tuning in practice: Pandas vs. Caviar
-3.4. Normalizing activations in a network
-3.5. Fitting Batch Norm into a neural network
-3.6. Why does Batch Norm work?
-3.7. Batch Norm at test time
-3.8. Softmax Regression
-3.9. Training a softmax classifier
-3.10. Deep learning frameworks
-3.11. TensorFlow
+Hyperparameter tuning
+	3.1. Tuning process
+	3.2. Using an appropriate scale to pick hyperparameters
+	3.3. Hyperparameters tuning in practice: Pandas vs. Caviar
+Batch Normalization
+	3.4. Normalizing activations in a network
+	3.5. Fitting Batch Norm into a neural network
+	3.6. Why does Batch Norm work?
+	3.7. Batch Norm at test time
+Multi-Class classification
+	3.8. Softmax Regression
+	3.9. Training a softmax classifier
+Introduction to programming frameworks
+	3.10. Deep learning frameworks
+	3.11. TensorFlow
 
 Notebook: Tensorflow
 
