@@ -1,13 +1,355 @@
 OPTIMIZATION ALGORITHMS
+Remember different optimization methods such as (Stochastic) Gradient Descent, Momentum, RMSProp and Adam
+Use random minibatches to accelerate the convergence and improve the optimization
+Know the benefits of learning rate decay and apply it to your optimization
+------------------------------------------------------------------------------------------------------------------------------------------------------------
 2.1	Mini-batch gradient descent
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
 2.2	Understanding mini-batch gradient descent
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
 2.3	Exponentially weighted averages
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
 2.4	Understanding exponentially weighted averages
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
 2.5	Bias correction in exponentially weighted averages
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
 2.6	Gradient descent with momentum
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
 2.7	RMSprop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
 2.8	Adam optimization algorithm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
 2.9	Learning rate decay
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
 2.10 The problem of local optimaNotebook: Optimization
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Video: Yuanqing Lin interview
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+Optimization Methods : Notebook 
+
+\1 - Gradient Descent
+\2 - Mini-Batch Gradient descent
+\3 - Momentum
+\4 - Adam
+\5 - Model with different optimization algorithms
+\	5.1 - Mini-batch Gradient descent
+\	5.2 - Mini-batch gradient descent with momentum
+\	5.3 - Mini-batch with Adam mode
+\	5.4 - Summary
+
+-----------------------------------------------------------------------------------------------------------------------------
+\1 - Gradient Descent
+A simple optimization method in machine learning is gradient descent (GD). When you take gradient steps with respect to all  m  examples on each step, it is also called Batch Gradient Descent.
+
+Warm-up exercise: Implement the gradient descent update rule. The gradient descent rule is, for  l=1,...,Ll=1,...,L :
+			W[l]=W[l]−α dW[l]					....(1)
+			b[l]=b[l]−α db[l]					....(2)
+	 	where L is the number of layers and  α is the learning rate. 
+All parameters should be stored in the parameters dictionary. Note that the iterator l starts at 0 in the For loop while the first parameters are  W[1]W[1]  and  b[1]b[1] . You need to shift l to l+1 when coding.
+
+# GRADED FUNCTION: update_parameters_with_gd
+
+def update_parameters_with_gd(parameters, grads, learning_rate):
+    """
+    Update parameters using one step of gradient descent
+    
+    Arguments:
+    parameters -- python dictionary containing your parameters to be updated:
+                    parameters['W' + str(l)] = Wl
+                    parameters['b' + str(l)] = bl
+    grads -- python dictionary containing your gradients to update each parameters:
+                    grads['dW' + str(l)] = dWl
+                    grads['db' + str(l)] = dbl
+    learning_rate -- the learning rate, scalar.
+    
+    Returns:
+    parameters -- python dictionary containing your updated parameters 
+    """
+
+    L = len(parameters) // 2 # number of layers in the neural networks
+
+    # Update rule for each parameter
+    for l in range(L):
+        ### START CODE HERE ### (approx. 2 lines)
+        parameters["W" + str(l+1)] = parameters["W" + str(l+1)] - (learning_rate * grads['dW' + str(l+1)])
+        parameters["b" + str(l+1)] = parameters["b" + str(l+1)] - (learning_rate * grads['db' + str(l+1)])
+        ### END CODE HERE ###
+        
+    return parameters
+parameters, grads, learning_rate = update_parameters_with_gd_test_case()
+
+parameters = update_parameters_with_gd(parameters, grads, learning_rate)
+print("W1 = " + str(parameters["W1"]))
+print("b1 = " + str(parameters["b1"]))
+print("W2 = " + str(parameters["W2"]))
+print("b2 = " + str(parameters["b2"]))
+
+
+------------------------------------------------
+A variant of this is "STOCHASTIC GRADIENT DESCENT (SGD)", which is equivalent to mini-batch gradient descent where each mini-batch has just 1 example. The update rule that you have just implemented does not change. What changes is that you would be computing gradients on just one training example at a time, rather than on the whole training set. The code examples below illustrate the difference between stochastic gradient descent and (batch) gradient descent.
+
+"(Batch) Gradient Descent":
+X = data_input
+Y = labels
+parameters = initialize_parameters(layers_dims)
+for i in range(0, num_iterations):
+    # Forward propagation
+    a, caches = forward_propagation(X, parameters)
+    # Compute cost.
+    cost = compute_cost(a, Y)
+    # Backward propagation.
+    grads = backward_propagation(a, caches, parameters)
+    # Update parameters.
+    parameters = update_parameters(parameters, grads)
+
+"Stochastic Gradient Descent:"
+X = data_input
+Y = labels
+parameters = initialize_parameters(layers_dims)
+for i in range(0, num_iterations):
+    for j in range(0, m):
+        # Forward propagation
+        a, caches = forward_propagation(X[:,j], parameters)
+        # Compute cost
+        cost = compute_cost(a, Y[:,j])
+        # Backward propagation
+        grads = backward_propagation(a, caches, parameters)
+        # Update parameters.
+        parameters = update_parameters(parameters, grads)
+
+@SGD vs GD
+In Stochastic Gradient Descent, you use only 1 training example before updating the gradients. "WHEN THE TRAINING SET IS LARGE, SGD CAN BE FASTER". But the parameters will "oscillate" toward the minimum rather than converge smoothly. Here is an illustration of this:
+"https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/2_Improving_Deep_NN_HyperparamTun_Reg_and_Opt/2_2_Optimization_Algorithms/SGD_vs_GD.png"
+
+"+" denotes a minimum of the cost. SGD leads to many oscillations to reach convergence. But each step is a lot faster to compute for SGD than for GD, as it uses only one training example (vs. the whole batch for GD).
+
+Note also that implementing SGD requires 3 For-loops in total:
+	Over the number of iterations
+	Over the  mm  training examples
+	Over the layers (to update all parameters, From  (W[1],b[1]) to  (W[L],b[L]))
+
+
+@SGD vs MBGD
+In practice, you`ll often get faster results if you do not use neither the whole training set, nor only one training example, to perform each update. "Mini-batch gradient descent" uses an intermediate number of examples For each step. With mini-batch gradient descent, you loop over the mini-batches instead of looping over individual training examples.
+"https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/2_Improving_Deep_NN_HyperparamTun_Reg_and_Opt/2_2_Optimization_Algorithms/SGD_vs_MBGD.png"
+
+"+" denotes a minimum of the cost. Using mini-batches in your optimization algorithm often leads to "FASTER OPTIMIZATION".
+
+------------------------------------------------------------------------------
+@What you should remember:
+	- The difference between gradient descent, mini-batch gradient descent and stochastic gradient descent is the number of examples you use to perform one update step.
+	- You have to tune a learning rate hyperparameter  αα .
+	- With a well-turned mini-batch size, usually it outperforms either gradient descent or stochastic gradient descent (particularly when the training set is large).
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+\2 - Mini-Batch Gradient descent
+-----------------------------------------------------------------------------------------------------------------------------
+\3 - Momentum
+-----------------------------------------------------------------------------------------------------------------------------
+\4 - Adam
+-----------------------------------------------------------------------------------------------------------------------------
+\5 - Model with different optimization algorithms
+-----------------------------------------------------------------------------------------------------------------------------
+\	5.1 - Mini-batch Gradient descent
+-----------------------------------------------------------------------------------------------------------------------------
+\	5.2 - Mini-batch gradient descent with momentum
+-----------------------------------------------------------------------------------------------------------------------------
+\	5.3 - Mini-batch with Adam mode
+-----------------------------------------------------------------------------------------------------------------------------
+\	5.4 - Summary
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
