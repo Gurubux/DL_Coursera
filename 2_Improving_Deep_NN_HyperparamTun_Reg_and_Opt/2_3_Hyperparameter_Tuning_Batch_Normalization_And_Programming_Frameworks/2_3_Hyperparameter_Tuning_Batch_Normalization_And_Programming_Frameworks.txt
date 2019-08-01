@@ -845,10 +845,8 @@ print("Your algorithm predicts: y = " + str(np.squeeze(my_image_prediction)))
 		- Create a session
 		- Initialize the session
 		- Run the session to execute the graph
-	- You can execute the graph multiple times as you've seen in model()
+	- You can execute the graph multiple times as you`ve seen in model()
 	- The backpropagation and optimization is automatically done when running the session on the "optimizer" object.
 
 
-
-
-
+asdaasd
