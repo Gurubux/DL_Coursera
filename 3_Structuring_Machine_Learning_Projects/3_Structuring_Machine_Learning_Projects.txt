@@ -42,9 +42,10 @@ AVOIDABLE BIAS
 --------------------------------------------------------------------------------------------------------------------------
 UNDERSTANDING HUMAN-LEVEL PERFORMANCE
 "https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/3_Structuring_Machine_Learning_Projects/w1_9_HUMAN-LEVEL_Error.PNG"
+"https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/3_Structuring_Machine_Learning_Projects/w1_9_HUMAN-LEVEL_Error_summary.PNG"
 --------------------------------------------------------------------------------------------------------------------------
 SURPASSING HUMAN-LEVEL PERFORMANCE
-
+So in this example, once you`ve surpassed this 0.5% threshold, your options, your ways of making progress on the machine learning problem are just less clear. It doesn`t mean you can`t make progress, you might still be able to make significant progress, but some of the tools you have for pointing you in a clear direction just don`t work as well. 
 --------------------------------------------------------------------------------------------------------------------------
 IMPROVING YOUR MODEL PERFORMANCE
 
