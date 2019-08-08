@@ -1,67 +1,71 @@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ WEEK - 1 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ------------------------------------------INTRODUCTION TO ML STRATEGY------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------
-Why ML Strategy
+WHY ML STRATEGY
 
+Improving Accuracy of ML Algo
+"https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/3_Structuring_Machine_Learning_Projects/ImprovingAccuracyMLAlgo.PNG"
 --------------------------------------------------------------------------------------------------------------------------
-Orthogonalization
-
-
+ORTHOGONALIZATION
+90 degree
+Changing one tuning parameter should only tune that parameter without affecting others - Orthogonalization
+So I hope that gives you a sense of what orthogonalization means. Just like when you look at the TV image, it`s nice if you can say, my TV image is too wide, so I`m going to tune this knob, or it`s too tall, so I`m going to tune that knob, or it`s too trapezoidal, so I`m going to have to tune that knob. In machine learning, it`s nice if you can look at your system and say, this piece of it is wrong. It does not do well on the training set, it does not do well on the dev set, it does not do well on the test set, or it`s doing well on the test set but just not in the real world. But figure out exactly what`s wrong, and then have exactly one knob, or a specific set of knobs that helps to just solve that problem that is limiting the performance of machine learning system. So what we`re going to do this week and next week is go through how to diagnose what exactly is the bottleneck to your system`s performance. As well as identify the specific set of knobs you could use to tune your system to improve that aspect of its performance.
 --------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------SETTING UP YOUR GOAL------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------
-Single number evaluation metric
+SINGLE NUMBER EVALUATION METRIC
 
 --------------------------------------------------------------------------------------------------------------------------
-Satisficing and Optimizing metric
+SATISFICING AND OPTIMIZING METRIC
 
 --------------------------------------------------------------------------------------------------------------------------
-Train/dev/test distributions
+TRAIN/DEV/TEST DISTRIBUTIONS
+Dev and Test set should be From same distribution
+"https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/3_Structuring_Machine_Learning_Projects/w1_5_Train_dev_test_set_Distribution.PNG"
+--------------------------------------------------------------------------------------------------------------------------
+SIZE OF THE DEV AND TEST SETS
 
 --------------------------------------------------------------------------------------------------------------------------
-Size of the dev and test sets
-
---------------------------------------------------------------------------------------------------------------------------
-When to change dev/test sets and metrics
+WHEN TO CHANGE DEV/TEST SETS AND METRICS
 
 --------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------COMPARING TO HUMAN-LEVEL PERFORMANCE------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------
-Why human-level performance?
+WHY HUMAN-LEVEL PERFORMANCE?
 
 --------------------------------------------------------------------------------------------------------------------------
-Avoidable bias
+AVOIDABLE BIAS
 
 --------------------------------------------------------------------------------------------------------------------------
-Understanding human-level performance
+UNDERSTANDING HUMAN-LEVEL PERFORMANCE
 
 --------------------------------------------------------------------------------------------------------------------------
-Surpassing human-level performance
+SURPASSING HUMAN-LEVEL PERFORMANCE
 
 --------------------------------------------------------------------------------------------------------------------------
-Improving your model performance
+IMPROVING YOUR MODEL PERFORMANCE
 
 
 
-Machine Learning flight simulator
-Reading: ReadingMachine Learning flight simulator
-Quiz: Bird recognition in the city of Peacetopia (case study)
+MACHINE LEARNING FLIGHT SIMULATOR
+READING: READINGMACHINE LEARNING FLIGHT SIMULATOR
+QUIZ: BIRD RECOGNITION IN THE CITY OF PEACETOPIA (CASE STUDY)
 
-VIDEO Andrej Karpathy
+VIDEO ANDREJ KARPATHY
 --------------------------------------------------------------------------------------------------------------------------
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ WEEK - 2 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ------------------------------------------ERROR ANALYSIS------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
-Carrying out error analysis
+CARRYING OUT ERROR ANALYSIS
 
 
 ------------------------------------------------------------------------------------------------------------------------------
-Cleaning up incorrectly labeled data
+CLEANING UP INCORRECTLY LABELED DATA
 
 
 ------------------------------------------------------------------------------------------------------------------------------
-Build your first system quickly, then iterate
+BUILD YOUR FIRST SYSTEM QUICKLY, THEN ITERATE
 
 
 
@@ -69,45 +73,45 @@ Build your first system quickly, then iterate
 ------------------------------------------MISMATCHED TRAINING AND DEV/TEST SET------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
-Training and testing on different distributions
+TRAINING AND TESTING ON DIFFERENT DISTRIBUTIONS
 
 
 ------------------------------------------------------------------------------------------------------------------------------
-Bias and Variance with mismatched data distributions
+BIAS AND VARIANCE WITH MISMATCHED DATA DISTRIBUTIONS
 
 
 ------------------------------------------------------------------------------------------------------------------------------
-Addressing data mismatch
+ADDRESSING DATA MISMATCH
 
 
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------LEARNING FROM MULTIPLE TASKS------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
-Transfer learning
+TRANSFER LEARNING
 
 
 ------------------------------------------------------------------------------------------------------------------------------
-Multi-task learning
+MULTI-TASK LEARNING
 
 
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------END-TO-END DEEP LEARNING------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
-What is end-to-end deep learning?
+WHAT IS END-TO-END DEEP LEARNING?
 
 
 ------------------------------------------------------------------------------------------------------------------------------
-Whether to use end-to-end deep learning
+WHETHER TO USE END-TO-END DEEP LEARNING
 
 
 
-Machine Learning flight simulator
-Quiz: Autonomous driving (case study)
+MACHINE LEARNING FLIGHT SIMULATOR
+QUIZ: AUTONOMOUS DRIVING (CASE STUDY)
 
 
-VIDEO - Ruslan Salakhutdinov
+VIDEO - RUSLAN SALAKHUTDINOV
 
 
 
