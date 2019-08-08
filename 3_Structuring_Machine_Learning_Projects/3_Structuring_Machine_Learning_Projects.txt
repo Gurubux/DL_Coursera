@@ -24,6 +24,7 @@ Dev and Test set should be From same distribution
 "https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/3_Structuring_Machine_Learning_Projects/w1_5_Train_dev_test_set_Distribution.PNG"
 --------------------------------------------------------------------------------------------------------------------------
 SIZE OF THE DEV AND TEST SETS
+"https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/3_Structuring_Machine_Learning_Projects/w1_6_Train_dev_test_set_Size.PNG"
 
 --------------------------------------------------------------------------------------------------------------------------
 WHEN TO CHANGE DEV/TEST SETS AND METRICS
@@ -32,7 +33,8 @@ WHEN TO CHANGE DEV/TEST SETS AND METRICS
 ------------------------------------------COMPARING TO HUMAN-LEVEL PERFORMANCE------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------
 WHY HUMAN-LEVEL PERFORMANCE?
-
+Bayes Optimal Error
+Manual Error Analysis
 --------------------------------------------------------------------------------------------------------------------------
 AVOIDABLE BIAS
 
