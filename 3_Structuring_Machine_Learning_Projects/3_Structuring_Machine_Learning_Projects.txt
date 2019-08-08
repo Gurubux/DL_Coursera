@@ -35,12 +35,13 @@ WHEN TO CHANGE DEV/TEST SETS AND METRICS
 WHY HUMAN-LEVEL PERFORMANCE?
 Bayes Optimal Error
 Manual Error Analysis
+"https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/3_Structuring_Machine_Learning_Projects/w1_8_Human_Level_error.PNG"
 --------------------------------------------------------------------------------------------------------------------------
 AVOIDABLE BIAS
-
+"https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/3_Structuring_Machine_Learning_Projects/w1_9_BIAS_reduction_techniques"
 --------------------------------------------------------------------------------------------------------------------------
 UNDERSTANDING HUMAN-LEVEL PERFORMANCE
-
+"https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/3_Structuring_Machine_Learning_Projects/w1_9_HUMAN-LEVEL_Error.PNG"
 --------------------------------------------------------------------------------------------------------------------------
 SURPASSING HUMAN-LEVEL PERFORMANCE
 
