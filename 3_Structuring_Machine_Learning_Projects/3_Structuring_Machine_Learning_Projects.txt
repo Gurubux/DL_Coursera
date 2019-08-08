@@ -49,7 +49,7 @@ So in this example, once you`ve surpassed this 0.5% threshold, your options, you
 --------------------------------------------------------------------------------------------------------------------------
 IMPROVING YOUR MODEL PERFORMANCE
 
-
+"https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/3_Structuring_Machine_Learning_Projects/w1_11_IMPROVING_Performance_summary.PNG"
 
 MACHINE LEARNING FLIGHT SIMULATOR
 READING: READINGMACHINE LEARNING FLIGHT SIMULATOR
