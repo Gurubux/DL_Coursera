@@ -108,31 +108,57 @@ Example:
 		Add 1,000 images From Mobile apps , 500 each into Dev and test set 
 		Adv 	: Model will aim to improve Dev set which has distributions From mobile apps, which matters
 		DisAdv 	: Data now DOES NOT come From same distribution into train and Dev/test set
+
+
+
 ------------------------------------------------------------------------------------------------------------------------------
 BIAS AND VARIANCE WITH MISMATCHED DATA DISTRIBUTIONS
 
-
+Train Set
+Train-dev Set
+Dev Set
+Test Set
 ------------------------------------------------------------------------------------------------------------------------------
 ADDRESSING DATA MISMATCH
-
+Artificial Data Synthesis -  Helps you Create more data
 
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------LEARNING FROM MULTIPLE TASKS------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
 TRANSFER LEARNING
+One of the most powerful ideas in deep learning is that sometimes you can take knowledge the neural network has learned from one task and apply that knowledge to a separate task. So for example, maybe you could have the neural network learn to recognize objects like cats and then use that knowledge or use part of that knowledge to help you do a better job reading x-ray scans.
+ Let`s take a look. Let`s say you`ve trained your neural network on image recognition. So you first take a neural network and train it on X Y pairs, where X is an image and Y is some object. An image is a cat or a dog or a bird or something else. If you want to take this neural network and adapt, or we say transfer, what is learned to a different task, such as radiology diagnosis, meaning really reading X-ray scans, what you can do is take this last output layer of the neural network and just delete that and delete also the weights feeding into that last output layer and create a new set of randomly initialized weights just for the last layer and have that now output radiology diagnosis. So to be concrete, during the first phase of training when you`re training on an image recognition task, you train all of the usual parameters for the neural network, all the weights, all the layers and you have something that now learns to make image recognition predictions. Having trained that neural network, what you now do to implement transfer learning is swap in a new data set X Y, where now these are radiology images. And Y are the diagnoses you want to predict and what you do is initialize the last layers` weights. Let`s call that W.L. and P.L. randomly. And now, retrain the neural network on this new data set, on the new radiology data set. You have a couple options of how you retrain neural network with radiology data. You might, if you have a small radiology dataset, you might want to just retrain the weights of the last layer, just W.L. P.L., and keep the rest of the parameters fixed.
+ 
+ The "rule of thumb" is maybe if you have a small data set, then just retrain the one last layer at the output layer. Or maybe that last one or two layers. But if you have a lot of data, then maybe you can retrain all the parameters in the network. And if you retrain all the parameters in the neural network, then this initial phase of training on image recognition is sometimes called pre-training, because you`re using image recognitions data to pre-initialize or really pre-train the weights of the neural network. And then if you are updating all the weights afterwards, then training on the radiology data sometimes that`s called fine tuning.
+Pre-Training
+Fine Tuning
 
-
+"https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/3_Structuring_Machine_Learning_Projects/TransferLearning.PNG"
+"https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/3_Structuring_Machine_Learning_Projects/TransferLearning_1.PNG"
+"https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/3_Structuring_Machine_Learning_Projects/TransferLearning_2.PNG"
 ------------------------------------------------------------------------------------------------------------------------------
 MULTI-TASK LEARNING
-
+So whereas in transfer learning, you have a sequential process where you learn From task A and then transfer that to task B. In multi-task learning, you start off simultaneously, trying to have one neural network do several things at the same time. And then each of these task helps hopefully all of the other task. 
 
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------END-TO-END DEEP LEARNING------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
 WHAT IS END-TO-END DEEP LEARNING?
+Two ways to achieve classification
+	1. Break A Problem into different problems like 
+			  X 	 	 	 	 	  	 	 	 	 	 	      Y
+			Audio ---> Features ---> Phenemes ---> Words ---> Transcript
 
+	2. END-TO-END DEEP LEARNING
+		      X 	 	 	 	 	  	 	 	 	 	 	      Y
+			Audio ------------------------------------------> Transcript
+
+Examples : 
+	Face Recognition
+	MAchine Translation
+	Estimating Child`s Age Using X-ray image of hand
 
 ------------------------------------------------------------------------------------------------------------------------------
 WHETHER TO USE END-TO-END DEEP LEARNING
