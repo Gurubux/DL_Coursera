@@ -62,15 +62,30 @@ VIDEO ANDREJ KARPATHY
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
 CARRYING OUT ERROR ANALYSIS
-
+Out of 100 observations mis-classified as cat -(Cat Classifier), calculated the % of mis-classified category which has most impact.
+For example:
+	8% are Dog images
+	62% are Big-Cats
+	30% are blurry images
+This Error Analysis helps us to get a direction of whether to better understand Dog or Big-Cats or blurry images - ( in this case Big-Cats and blurry) is worth the time and effort and is most effective.
 
 ------------------------------------------------------------------------------------------------------------------------------
 CLEANING UP INCORRECTLY LABELED DATA
+-Training set
+	Output label y are are incorrect, in your training set. 
+	If "random error"(Miss typed 0 As 1 etc) then its probably fine to leave in incorrect, but if "Systematic Error" (All white dogs are miss-classified As cats) then these needs to be fixed
+-Dev set
+	So for this in the above 'ERROR ANALYSIS' table add a column to capture labels that are incorrectly labeled rather than Labels that are incorrectly classified by your model, and see if has a higer impact if yes, make the changes.
 
+-Test set
+	Apply same fixing process of Dev set on test set
+
+Fixing in Training set is avoid due to the large amount of data it has, which is ok. Also this may result in the distribution of your Train and Dev/Test set data to differ.
 
 ------------------------------------------------------------------------------------------------------------------------------
 BUILD YOUR FIRST SYSTEM QUICKLY, THEN ITERATE
-
+"BUILD YOUR FIRST SYSTEM QUICKLY, THEN ITERATE"
+Use "Bias/Variance Analysis" and "Error Analysis" to prioritize your next steps.
 
 
 ------------------------------------------------------------------------------------------------------------------------------
@@ -78,8 +93,21 @@ BUILD YOUR FIRST SYSTEM QUICKLY, THEN ITERATE
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
 TRAINING AND TESTING ON DIFFERENT DISTRIBUTIONS
+Training and testing on different distributions
+Example:
+	Training data From Webpages ~ 10,000
+	Testing data From Mobile apps ~ 2,000
+	Solution 1 : 
+		Add both together ~ 12,000 and reshuffle and divide into 90/5/5 - 10,800/600/600 Traing/Dev/Test set
+		Adv 	: Data now comes From same distribution
+		DisAdv 	: A lot of Data in dev set now comes from Webpages 
+				  Since 84% data is From WebPages and 26 is From Mobile apps, 504 images would be From only  WebPages and only 96 would be from Mobile Apps
 
-
+	Solution 2 : (Better)
+		Add 10,000 From webpages and 1,000 images Mobile apps into Train Set
+		Add 1,000 images From Mobile apps , 500 each into Dev and test set 
+		Adv 	: Model will aim to improve Dev set which has distributions From mobile apps, which matters
+		DisAdv 	: Data now DOES NOT come From same distribution into train and Dev/test set
 ------------------------------------------------------------------------------------------------------------------------------
 BIAS AND VARIANCE WITH MISMATCHED DATA DISTRIBUTIONS
 
