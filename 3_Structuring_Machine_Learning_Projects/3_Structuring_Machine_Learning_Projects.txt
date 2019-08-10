@@ -162,8 +162,20 @@ Examples :
 
 ------------------------------------------------------------------------------------------------------------------------------
 WHETHER TO USE END-TO-END DEEP LEARNING
+Pros and Cons :
+	Pros : 
+		1. Lets Data Speak
+		2. Less hand designing of Components needed
+
+	Cons :
+		1. Need large amount of data to Go From X --> You
+		2. Excludes potentially usefully hand-designed components.
+
+"KEY QUESTION"
+	Do you have sufficient data to learn the function of the complexity needed to map from X to Y?
 
 
+Less promising
 
 MACHINE LEARNING FLIGHT SIMULATOR
 QUIZ: AUTONOMOUS DRIVING (CASE STUDY)
@@ -174,7 +186,7 @@ VIDEO - RUSLAN SALAKHUTDINOV
 
 
 
-
+"https://www.coursera.org/account/accomplishments/verify/SC85D5HGRSWQ"
 
 
 
