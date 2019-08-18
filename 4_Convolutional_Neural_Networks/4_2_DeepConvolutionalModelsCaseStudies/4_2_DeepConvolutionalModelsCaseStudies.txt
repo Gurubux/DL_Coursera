@@ -11,13 +11,13 @@ WHY LOOK AT CASE STUDIES?
 
 ---------------------------------------------------------------------------------------------------------------------------------
 CLASSIC NETWORKS
-
-
-
-
+LeNet-5
+ALexNet
+VGG
 
 ---------------------------------------------------------------------------------------------------------------------------------
 RESNETS
+Skip Connections
 
 
 
@@ -60,31 +60,239 @@ USING OPEN-SOURCE IMPLEMENTATION
 
 ---------------------------------------------------------------------------------------------------------------------------------
 TRANSFER LEARNING
-
-
-
+Download the model and the weigths
+In terms of the network, I`d encourage you to think of all of these layers as frozen so you freeze the parameters in all of these layers of the network and you would then just train the parameters associated with your softmax layer. Which is the softmax layer with three possible outputs, Tigger, Misty or neither. 
+"TrasnferLearning.jpg"
 
 
 ---------------------------------------------------------------------------------------------------------------------------------
 DATA AUGMENTATION
-
-
-
-
-
+	- Mirroring
+	- Random Cropping
+		- Rotation
+		- Shearing
+		- Local warping
+	- Color Shifting
+		R,G,B
+		R+10,G-40,B-10
+		R+40,G-20,B-60
+		....
+	- PCA color augmentation
+	- Implementing distortions during training
+		CPU thread is constantly loading data as well as implementing whether the distortions are needed to form a batch or really many batches of data.
+		"Augmentation_Distortion.jpg"
 ---------------------------------------------------------------------------------------------------------------------------------
 STATE OF COMPUTER VISION
 
+Ensemble
+	Train several networks independently and average thier outputs
 
+Multi-crop at test time
+	- Multi-crop is a form of applying data augmentation to your test image as well.
+	- 10-crop
 
 
 ---------------------------------------------------------------------------------------------------------------------------------
+QUIZ
+In order to be able to build very deep networks, we usually only use pooling layers to downsize the height/width of the activation volumes while convolutions are used with “valid” padding. Otherwise, we would downsize the input of the model too quickly.- False
+Suppose you have an input volume of dimension 64x64x16. How many parameters would a single 1x1 convolutional filter have (including the bias)?
+
+17
+1
+2
+4097
+
+
+Which ones of the following statements on Inception Networks are true? (Check all that apply.)
+Which of the following are common reasons for using open-source implementations of ConvNets (both the model and/or weights)? Check all that apply.
 ---------------------------------------------------------------------------------------------------------------------------------
 NOTEBOOK: KERAS TUTORIAL - THE HAPPY HOUSE (NOT GRADED)
+Why are we using Keras? Keras was developed to enable deep learning engineers to build and experiment with different models very quickly. Just as TensorFlow is a higher-level framework than Python, Keras is an even higher-level framework and provides additional abstractions. Being able to go from idea to result with the least possible delay is key to finding good models. However, Keras is more restrictive than the lower-level frameworks, so there are some very complex models that you can implement in TensorFlow but not (without more difficulty) in Keras. That being said, Keras will work fine for many common models.
+
+\1. Building a model in Keras
+def model(input_shape):
+    # Define the input placeholder as a tensor with shape input_shape. Think of this as your input image!
+    X_input = Input(input_shape)
+
+    # Zero-Padding: pads the border of X_input with zeroes
+    X = ZeroPadding2D((3, 3))(X_input)
+
+    # CONV -> BN -> RELU Block applied to X
+    X = Conv2D(32, (7, 7), strides = (1, 1), name = 'conv0')(X)
+    X = BatchNormalization(axis = 3, name = 'bn0')(X)
+    X = Activation('relu')(X)
+
+    # MAXPOOL
+    X = MaxPooling2D((2, 2), name='max_pool')(X)
+
+    # FLATTEN X (means convert it to a vector) + FULLYCONNECTED
+    X = Flatten()(X)
+    X = Dense(1, activation='sigmoid', name='fc')(X)
+
+    # Create model. This creates your Keras model instance, you'll use this instance to train/test the model.
+    model = Model(inputs = X_input, outputs = X, name='HappyModel')
+
+    return model
+Note that Keras uses a different convention with variable names than we`ve previously used with numpy and TensorFlow. In particular, rather than creating and assigning a new variable on each step of forward propagation such as X, Z1, A1, Z2, A2, etc. for the computations for the different layers, in Keras code each line above just reassigns X to a new value using X = .... In other words, during each step of forward propagation, we are just writing the latest value in the commputation into the same variable X. The only exception was X_input, which we kept separate and did not overwrite, since we needed it at the end to create the Keras model instance (model = Model(inputs = X_input, ...) above).
+
+\2. To train and test this model, there are four steps in Keras:
+	1. Create the model by calling the function above
+	2. Compile the model by calling model.compile(optimizer = "...", loss = "...", metrics = ["accuracy"])
+	3. Train the model on train data by calling model.fit(x = ..., y = ..., epochs = ..., batch_size = ...)
+	4. Test the model on test data by calling model.evaluate(x = ..., y = ...)
+
+	\1. Create the model by calling the function above
+	happyModel = HappyModel(X_train.shape[1:])
+
+	\2. Compile the model by calling model.compile(optimizer = "...", loss = "...", metrics = ["accuracy"])
+	#Implement step 2, i.e. compile the model to configure the learning process. Choose the 3 arguments of compile() wisely. Hint: the Happy Challenge is a binary classification problem.
+	#https://keras.io/losses/
+	#https://keras.io/optimizers/
+	happyModel.compile(optimizer = "Adam", loss = "binary_crossentropy", metrics = ["accuracy"])
+
+	\3. Train the model on train data by calling model.fit(x = ..., y = ..., epochs = ..., batch_size = ...)
+	#Exercise: Implement step 3, i.e. train the model. Choose the number of epochs and the batch size.
+	happyModel.fit(x = X_train, y = Y_train, epochs = 10, batch_size = 10)
+	>>>
+Epoch 1/10
+600/600 [==============================] - 12s - loss: 1.3253 - acc: 0.7100    
+Epoch 2/10
+600/600 [==============================] - 12s - loss: 0.3597 - acc: 0.8800    
+Epoch 3/10
+600/600 [==============================] - 12s - loss: 0.1655 - acc: 0.9383    
+Epoch 4/10
+600/600 [==============================] - 12s - loss: 0.1446 - acc: 0.9417    
+Epoch 5/10
+600/600 [==============================] - 12s - loss: 0.2258 - acc: 0.9167    
+Epoch 6/10
+600/600 [==============================] - 12s - loss: 0.1242 - acc: 0.9567    
+Epoch 7/10
+600/600 [==============================] - 12s - loss: 0.1326 - acc: 0.9600    - ETA: 8s - loss: 0.1902 - acc: 0 - ET
+Epoch 8/10
+600/600 [==============================] - 12s - loss: 0.1176 - acc: 0.9600    - ETA: 1s - loss: 0.1284 - acc
+Epoch 9/10
+600/600 [==============================] - 12s - loss: 0.0879 - acc: 0.9700    
+Epoch 10/10
+600/600 [==============================] - 12s - loss: 0.1102 - acc: 0.9700    
+<keras.callbacks.History at 0x7fb8ff092240>
+#Note that if you run fit() again, the model will continue to train with the parameters it has already learnt instead of reinitializing them.
+
+	\4. 
+	preds = happyModel.evaluate(x = X_test, y =Y_test)
+	print()
+	print ("Loss = " + str(preds[0]))
+	print ("Test Accuracy = " + str(preds[1]))
+	>>>
+150/150 [==============================] - 1s     
+Loss = 0.235461475054
+Test Accuracy = 0.920000003974
+
+\3 - CONCLUSION
+REMEMBER:
+- Keras is a tool we recommend For rapid prototyping. It allows you to quickly Try out different model architectures. Are there any applications of deep learning to your daily life that you`d like to implement using Keras?
+- Remember how to code a model in Keras and the four steps leading to the evaluation of your model on the test set. Create->Compile->Fit/Train->Evaluate/Test.
+
+
+\4 - TEST WITH YOUR OWN IMAGE
+### START CODE HERE ###
+img_path = 'images/face4.jpg'
+### END CODE HERE ###
+img = image.load_img(img_path, target_size=(64, 64))
+imshow(img)
+
+x = image.img_to_array(img)
+x = np.expand_dims(x, axis=0)
+x = preprocess_input(x)
+
+print(['happy' if happyModel.predict(x) ==1 else 'Unhappy'])
+
+
+\5 - OTHER USEFUL FUNCTIONS IN KERAS
+Two other basic features of Keras that you`ll find useful are:
+	- model.summary(): prints the details of your layers in a table with the sizes of its inputs/outputs
+	- plot_model(): plots your graph in a nice layout. You can even save it as ".png" using SVG() if you`d like to share it on social media ;). It is saved in "File" then "Open..." in the upper bar of the notebook.
+	happyModel.summary()
+>>>________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+input_3 (InputLayer)         (None, 64, 64, 3)         0         
+_________________________________________________________________
+zero_padding2d_3 (ZeroPaddin (None, 70, 70, 3)         0         
+_________________________________________________________________
+conv0 (Conv2D)               (None, 64, 64, 32)        4736      
+_________________________________________________________________
+bn0 (BatchNormalization)     (None, 64, 64, 32)        128       
+_________________________________________________________________
+activation_1 (Activation)    (None, 64, 64, 32)        0         
+_________________________________________________________________
+max_pool (MaxPooling2D)      (None, 32, 32, 32)        0         
+_________________________________________________________________
+flatten_1 (Flatten)          (None, 32768)             0         
+_________________________________________________________________
+fc (Dense)                   (None, 1)                 32769     
+=================================================================
+Total params: 37,633
+Trainable params: 37,569
+Non-trainable params: 64
+_________________________________________________________________
+
+
+plot_model(happyModel, to_file='HappyModel.png')
+SVG(model_to_dot(happyModel).create(prog='dot', format='svg'))
+
+
 NOTEBOOK: RESIDUAL NETWORKS
+In this assignment, you will:
+	Implement the basic building blocks of ResNets.
+	Put together these building blocks to implement and train a state-of-the-art neural network For image classification.
+
+1 - The problem of very deep neural networks
+2 - Building a Residual Network
+	2.1 - The identity block
+	2.2 - The convolutional block
+3 - Building your first ResNet model (50 layers)
+4 - Test on your own image (Optional/Ungraded)
+What you should remember:
+- Very deep "plain" networks don't work in practice because they are hard to train due to vanishing gradients.
+- The skip-connections help to address the Vanishing Gradient problem. They also make it easy for a ResNet block to learn an identity function.
+- There are two main type of blocks: The identity block and the convolutional block.
+- Very deep Residual Networks are built by stacking these blocks together.
+
+\1 - The problem of very deep neural networks
+During training, you might therefore see the magnitude (or norm) of the gradient for the earlier layers descrease to zero very rapidly as training proceeds:
+"The speed of learning decreases very rapidly for the early layers as the network trains"
+You are now going to solve this problem by building a Residual Network!
 
 
 
+\2 - Building a Residual Network
+"DeepNN_Problem_Solution_ResNet_skip_connection_kiank.jpg"
+#In ResNets, a "shortcut" or a "skip connection" allows the gradient to be directly backpropagated to earlier layers:
+#We also saw in lecture that having ResNet blocks with the shortcut also makes it very easy for one of the blocks to learn an identity function. This means that you can stack on additional ResNet blocks with little risk of harming training set performance. (There is also some evidence that the ease of learning an identity function--even more than skip connections helping with vanishing gradients--accounts for ResNets' remarkable performance.)
+#Two main types of blocks are used in a ResNet, depending mainly on whether the input/output dimensions are same or different. You are going to implement both of them.
+
+	\2.1 - The identity block
+	#The identity block is the standard block used in ResNets, and corresponds to the case where the input activation (say  a[l]a[l] ) has the same dimension as the output activation (say  a[l+2]a[l+2] ). To flesh out the different steps of what happens in a ResNet's identity block, here is an alternative diagram showing the individual steps:
+	  _________________________________________________________________________________________________
+	  ↑	                                                                                               ↓
+x ----↑----- > conv2dd BatchNorm Relu ------------------------> conv2d Batch Norm -------- ⊕ --------->Relu
+Figure 3 : Identity block. Skip connection "skips over" 2 layers.
+
+	  _______________________________________________________________________________________________________________________________
+	  ↑	                                                                                                      				        ↓
+x ----↑----- > conv2dd BatchNorm Relu ------------------------> conv2d Batch Norm Relu------------------------>Conv2d Batch Norm--- ⊕ --------->Relu
+Figure 4 : Identity block. Skip connection "skips over" 3 layers.
+
+
+	\2.2 - The convolutional block
+	  _________________________________________________________conv2d Batch__________________________________________________________
+	  ↑	                                                                                                      				        ↓
+x ----↑----- > conv2dd BatchNorm Relu ------------------------> conv2d Batch Norm Relu------------------------>Conv2d Batch Norm--- ⊕ --------->Relu
+
+
+
+\3 - Building your first ResNet model (50 layers)
+\4 - Test on your own image (Optional/Ungraded)
 ---------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------
 
