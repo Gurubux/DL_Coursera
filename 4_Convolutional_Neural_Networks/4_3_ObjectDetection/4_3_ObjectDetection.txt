@@ -24,7 +24,7 @@ OBJECT DETECTION
 ----------------------------------------------------------------------------------------------------------------------
 CONVOLUTIONAL IMPLEMENTATION OF SLIDING WINDOWS
 
-
+So just to recap, to implement sliding windows, previously, what you do is you crop out a region. Let`s say this is 14 by 14 and run that through your convnet and do that for the next region over, then do that for the next 14 by 14 region, then the next one, then the next one, then the next one, then the next one and so on, until hopefully that one recognizes the car. But now, instead of doing it sequentially, with this convolutional implementation that you saw in the previous slide, "YOU CAN IMPLEMENT THE ENTIRE IMAGE, ALL MAYBE 28 BY 28 AND CONVOLUTIONALLY MAKE ALL THE PREDICTIONS AT THE SAME TIME BY ONE FORWARD PASS THROUGH THIS BIG CONVNET" and hopefully have it recognize the position of the car. So that`s how you implement sliding windows convolutionally and it makes the whole thing much more efficient.
 
 
 ----------------------------------------------------------------------------------------------------------------------
@@ -66,6 +66,40 @@ YOLO ALGORITHM
 ----------------------------------------------------------------------------------------------------------------------
 NOTEBOOK: CAR DETECTION WITH YOLOV2
 
+\YOLO
+YOLO ("you only look once") is a popular algoritm because it achieves high accuracy while also being able to run in real-time. This algorithm "only looks once" at the image in the sense that it requires only one forward propagation pass through the network to make predictions. After non-max suppression, it then outputs recognized objects together with the bounding boxes.
+
+\2.1 - Model details
+First things to know:
+	- The input is a batch of images of shape (m, 608, 608, 3)
+	- The output is a list of bounding boxes along with the recognized classes. Each bounding box is represented by 6 numbers  (pc,bx,by,bh,bw,c)(pc,bx,by,bh,bw,c)  as explained above. If you expand  cc  into an 80-dimensional vector, each bounding box is then represented by 85 numbers.
+We will use 5 anchor boxes. So you can think of the YOLO architecture as the following: IMAGE (m, 608, 608, 3) -> DEEP CNN -> ENCODING (m, 19, 19, 5, 85).
+Lets look in greater detail at what this encoding represents.
+	Figure 2 : Encoding architecture for YOLO
+
+"If the center/midpoint of an object falls into a grid cell, that grid cell is responsible for detecting that object."
+
+
+In the figure above, we plotted only boxes that the model had assigned a high probability to, but this is still too many boxes. You`d like to filter the algorithm`s output down to a much smaller number of detected objects. To do so, you`ll use non-max suppression. Specifically, you`ll carry out these steps:
+	- Get rid of boxes with a low score (meaning, the box is not very confident about detecting a class)
+	- Select only one box when several boxes overlap with each other and detect the same object.
+
+\2.2 - Filtering with a threshold on class scores
+The model gives you a total of 19x19x5x85 numbers, with each box described by 85 numbers. It`ll be convenient to rearrange the (19,19,5,85) (or (19,19,425)) dimensional tensor into the following variables:
+	- "box_confidence": tensor of shape  (19×19,5,1)(19×19,5,1)  containing  pcpc  (confidence probability that there`s some object) for each of the 5 boxes predicted in each of the 19x19 cells.
+	- "boxes": tensor of shape  (19×19,5,4)(19×19,5,4)  containing  (bx,by,bh,bw)(bx,by,bh,bw)  for each of the 5 boxes per cell.
+	- "box_class_probs": tensor of shape  (19×19,5,80)(19×19,5,80)  containing the detection probabilities  (c1,c2,...c80)(c1,c2,...c80)  for each of the 80 classes for each of the 5 boxes per cell.
+Exercise: Implement yolo_filter_boxes().
+	1. Compute box scores by doing the elementwise product as described in Figure 4. The following code may help you choose the right operator:
+		a = np.random.randn(19*19, 5, 1)
+		b = np.random.randn(19*19, 5, 80)
+		c = a * b # shape of c will be (19*19, 5, 80)
+	2. For each box, find:
+		- the index of the class with the maximum box score (Hint) (Be careful with what axis you choose; consider using axis=-1)
+		- the corresponding box score (Hint) (Be careful with what axis you choose; consider using axis=-1)
+	3. Create a mask by using a threshold. As a reminder: ([0.9, 0.3, 0.4, 0.5, 0.1] < 0.4) returns: [False, True, False, False, True]. The mask should be True for the boxes you want to keep.
+	4. Use TensorFlow to apply the mask to box_class_scores, boxes and box_classes to filter out the boxes we don`t want. You should be left with just the subset of boxes you want to keep. (Hint)
+Reminder: to call a Keras function, you should use K.function(...).
 ----------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------
 GRADED: DETECTION ALGORITHMS

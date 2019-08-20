@@ -22,7 +22,7 @@ SIAMESE NETWORK
 
 -----------------------------------------------------------------------------------------------------------------------
 TRIPLET LOSS
-
+One way to learn the parameters of the neural network so that it gives you a good encoding for your pictures of faces is to define an applied gradient descent on the triplet loss function. 
 
 
 
@@ -67,9 +67,542 @@ STYLE COST FUNCTION
 
 
 -----------------------------------------------------------------------------------------------------------------------
+QUIZ
+Face verification requires comparing a new picture against one person’s face, whereas face recognition requires comparing a new picture against K person’s faces.
 -----------------------------------------------------------------------------------------------------------------------
 NOTEBOOK: ART GENERATION WITH NEURAL STYLE TRANSFER
+
+Most of the algorithms you`ve studied optimize a cost function to get a set of parameter values. In Neural Style Transfer, you`ll optimize a cost function to get" PIXEL VALUES"!
+1 - Problem Statement
+2 - Transfer Learning
+3 - Neural Style Transfer
+	3.1 - Computing the content COST
+		3.1.1 - How do you ensure the generated image G matches the content of the image C?
+			Jcontent(C,G) =1/(4×nH×nW×nC)	∑        (a(C) − a(G))²	 	 	.....(1)
+										ᵃˡˡ ᵉⁿᵗʳᶦᵉˢ
+	3.2 - Computing the style cost
+		3.2.1 - Style matrix
+		3.2.2 - Style cost
+		3.2.3 - Style Weights
+	3.3 - Defining the total cost to optimize
+4 - Solving the optimization problem
+5 - Test With your own image (Optional/Ungraded)
+6 - Conclusion
+
+
+
+\1 - Problem Statement
+#Neural Style Transfer (NST) is one of the most fun techniques in deep learning. As seen below, it merges two images, namely, a "content" image (C) and a "style" image (S), to create a "generated" image (G). The generated image G combines the "content" of the image C with the "style" of image S.
+
+\2 - Transfer Learning
+#Neural Style Transfer (NST) uses a previously trained convolutional network, and builds on top of that. The idea of using a network trained on a different task and applying it to a new task is called transfer learning.
+
+#Following the original NST paper (https://arxiv.org/abs/1508.06576), we will use the VGG network. Specifically, we`ll use VGG-19, a 19-layer version of the VGG network. This model has already been trained on the very large ImageNet database, and thus has learned to recognize a variety of low level features (at the earlier layers) and high level features (at the deeper layers).
+
+model = load_vgg_model("pretrained-model/imagenet-vgg-verydeep-19.mat")
+print(model)
+
+#The model is stored in a python dictionary where each variable name is the key and the corresponding value is a tensor containing that variable's value. To run an image through this network, you just have to feed the image to the model. In TensorFlow, you can do so using the tf.assign function. In particular, you will use the assign function like this:
+model["input"].assign(image)
+
+#This assigns the image as an input to the model. After this, if you want to access the activations of a particular layer, say layer 4_2 when the network is run on this image, you would run a TensorFlow session on the correct tensor conv4_2, as follows:
+sess.run(model["conv4_2"])
+
+\3 - Neural Style Transfer
+3 Steps
+	1. Jcontent(C,G)
+	2. Jstyle(S,G)
+	3. J(G)= α . Jcontent(C,G) + β . Jstyle(S,G)
+
+
+	\3.1 - Computing the content cost - Jcontent(C,G)
+content_image = scipy.misc.imread("images/louvre.jpg")
+imshow(content_image)
+
+		\3.1.1 - How do you ensure the generated image G matches the content of the image C?
+# GRADED FUNCTION: compute_content_cost
+
+def compute_content_cost(a_C, a_G):
+    ### START CODE HERE ###
+    # Retrieve dimensions from a_G (≈1 line)
+    m, n_H, n_W, n_C = a_G.get_shape().as_list()
+    
+    # Reshape a_C and a_G (≈2 lines)
+    a_C_unrolled = tf.transpose(tf.reshape(a_C, [n_H * n_W, n_C]))
+    a_G_unrolled = tf.transpose(tf.reshape(a_G, [n_H * n_W, n_C]))
+    
+    # compute the cost with tensorflow (≈1 line)
+    " Jcontent(C,G) =1/(4×nH×nW×nC)	∑        (a(C) − a(G))²	 	 	.....(1)\
+    							ᵃˡˡ ᵉⁿᵗʳᶦᵉˢ										"
+    J_content = 1/(4 * n_H* n_W* n_C) * tf.reduce_sum(tf.square(tf.subtract(a_C_unrolled,a_G_unrolled)))
+    ### END CODE HERE ###
+    
+    return J_content
+>>>J_content = 6.76559  
+  
+"REMEMBER"
+----> The content cost takes a hidden layer activation of the neural network, and measures how different  a(C)  and  a(G) are.
+----> When we minimize the content cost later, this will help make sure  G  has similar content as  C .
+
+
+	\3.2 - Computing the style cost - Jstyle(S,G)
+style_image = scipy.misc.imread("images/monet_800600.jpg")
+imshow(style_image)
+		\3.2.1 - Style matrix
+#The style matrix is also called a "Gram matrix." In linear algebra, the Gram matrix G of a set of vectors  (v1,…,vn)  is the matrix of dot products, whose entries are  Gij = vTivj =np.dot(vi,vj). In other words,  Gij  compares how similar  vi  is to  vj : If they are highly similar, you would expect them to have a large dot product, and thus for  Gij to be large.
+
+#In NST, you can compute the Style matrix by multiplying the "unrolled" filter matrix with their transpose:
+NST_GM.png
+
+#The result is a matrix of dimension  (nC,nC)  where  nC  is the number of filters. The value  Gij  measures how similar the activations of filter  i  are to the activations of filter  j .
+# GRADED FUNCTION: gram_matrix
+
+def gram_matrix(A):
+    GA = tf.matmul(A,tf.transpose(A))
+    return GA
+
+
+		\3.2.2 - Style cost
+#After generating the Style matrix (Gram matrix), your goal will be to minimize the distance between the Gram matrix of the "style" image S and that of the "generated" image G. For now, we are using only a single hidden layer  a[l]a[l] , and the corresponding style cost for this layer is defined as							      n꜀ n꜀
+Jₛₜᵧₗₑ[ˡ](S,G)= 1/(4×nC²×(nH×nW)²)  ∑  ∑   (G⁽ˢ⁾ᵢⱼ−G⁽ᴳ⁾ᵢⱼ)²
+								 i=1 j=1
+#where  G(S)  and  G(G) are respectively the Gram matrices of the "style" image and the "generated" image, computed using the hidden layer activations for a particular hidden layer in the network.
+
+		\3.2.3 - Style Weights
+
+Jₛₜᵧₗₑ(S,G)=∑ λ[ˡ] Jₛₜᵧₗₑ[ˡ](S,G)
+		  ˡ
+STYLE_LAYERS = [
+    ('conv1_1', 0.2),
+    ('conv2_1', 0.2),
+    ('conv3_1', 0.2),
+    ('conv4_1', 0.2),
+    ('conv5_1', 0.2)]
+def compute_style_cost(model, STYLE_LAYERS):
+    # initialize the overall style cost
+    J_style = 0
+
+    for layer_name, coeff in STYLE_LAYERS:
+
+        # Select the output tensor of the currently selected layer
+        out = model[layer_name]
+
+        # Set a_S to be the hidden layer activation from the layer we have selected, by running the session on out
+        a_S = sess.run(out)
+
+        # Set a_G to be the hidden layer activation from same layer. Here, a_G references model[layer_name] 
+        # and isn't evaluated yet. Later in the code, we'll assign the image G as the model input, so that
+        # when we run the session, this will be the activations drawn from the appropriate layer, with G as input.
+        a_G = out
+        
+        # Compute style_cost for the current layer
+        J_style_layer = compute_layer_style_cost(a_S, a_G)
+
+        # Add coeff * J_style_layer of this layer to overall style cost
+        J_style += coeff * J_style_layer
+
+    return J_style
+"REMEMBER"
+	- The style of an image can be represented using the Gram matrix of a hidden layer`s activations. However, we get even better results combining this representation from multiple different layers. This is in contrast to the content representation, where usually using just a single hidden layer is sufficient.
+	- Minimizing the style cost will cause the image  GG  to follow the style of the image  SS .
+	\3.3 - Defining the total cost to optimize - J(G)= α . Jcontent(C,G) + β . Jstyle(S,G)
+# GRADED FUNCTION: total_cost
+
+def total_cost(J_content, J_style, alpha = 10, beta = 40):
+    ### START CODE HERE ### (≈1 line)
+    J = alpha * J_content + beta * J_style
+    ### END CODE HERE ###
+    
+    return J
+"REMEMBER"
+	- The total cost is a linear combination of the content cost  Jcontent(C,G)  and the style cost  Jstyle(S,G)
+	- α  and  β  are hyperparameters that control the relative weighting between content and style
+
+
+
+
+\4 - Solving the optimization problem
+Finally, let`s put everything together to implement Neural Style Transfer!
+Here`s what the program will have to do:
+
+	1. Create an Interactive Session
+	2. Load the content image
+	3. Load the style image
+	4. Randomly initialize the image to be generated
+	5. Load the VGG16 model
+	6. Build the TensorFlow graph:
+		1. Run the content image through the VGG16 model and compute the content cost
+		2. Run the style image through the VGG16 model and compute the style cost
+		3. Compute the total cost
+		4. Define the optimizer and the learning rate
+	7. Initialize the TensorFlow graph and run it for a large number of iterations, updating the generated image at every step.
+1. Create an Interactive Session
+tf.reset_default_graph()
+sess = tf.InteractiveSession()	
+
+2. Load the content image
+content_image = scipy.misc.imread("images/louvre_small.jpg")
+content_image = reshape_and_normalize_image(content_image)
+
+3. Load the style image
+style_image = scipy.misc.imread("images/monet.jpg")
+style_image = reshape_and_normalize_image(style_image)
+
+4. Randomly initialize the image to be generated
+generated_image = generate_noise_image(content_image)
+imshow(generated_image[0])
+
+5. Load the VGG16 model
+model = load_vgg_model("pretrained-model/imagenet-vgg-verydeep-19.mat")
+6. Build the TensorFlow graph:
+	1. Run the content image through the VGG16 model and compute the content cost
+	2. Run the style image through the VGG16 model and compute the style cost
+	3. Compute the total cost
+	4. Define the optimizer and the learning rate
+	\1. Run the content image through the VGG16 model and compute the content cost
+	# Assign the content image to be the input of the VGG model.  
+	sess.run(model['input'].assign(content_image))
+	# Select the output tensor of layer conv4_2
+	out = model['conv4_2']
+	# Set a_C to be the hidden layer activation from the layer we have selected
+	a_C = sess.run(out)
+	# Set a_G to be the hidden layer activation from same layer. Here, a_G references model['conv4_2'] 
+	# and isn't evaluated yet. Later in the code, we'll assign the image G as the model input, so that
+	# when we run the session, this will be the activations drawn from the appropriate layer, with G as input.
+	a_G = out
+	# Compute the content cost
+	J_content = compute_content_cost(a_C, a_G)
+	"NOTE": At this point, a_G is a tensor and hasn`t been evaluated. It will be evaluated and updated at each iteration when we run the Tensorflow graph in 	model_nn() below.	
+	
+	\2. Run the style image through the VGG16 model and compute the style cost
+	# Assign the input of the model to be the "style" image 
+	sess.run(model['input'].assign(style_image))
+	# Compute the style cost
+	J_style = compute_style_cost(model, STYLE_LAYERS)
+	
+	\3. Compute the total cost
+	J = total_cost(J_content, J_style)
+	
+	\4. Define the optimizer and the learning rate
+	optimizer = tf.train.AdamOptimizer(2.0)
+	train_step = optimizer.minimize(J)
+
+
+
+7. Initialize the TensorFlow graph and run it for a large number of iterations, updating the generated image at every step.
+#Implement the model_nn() function which initializes the variables of the tensorflow graph, assigns the input image (initial generated image) as the input of the VGG16 model and runs the train_step for a large number of steps.
+def model_nn(sess, input_image, num_iterations = 200):
+    
+    # Initialize global variables (you need to run the session on the initializer)
+    ### START CODE HERE ### (1 line)
+    sess.run(tf.global_variables_initializer())
+    ### END CODE HERE ###
+    
+    # Run the noisy input image (initial generated image) through the model. Use assign().
+    ### START CODE HERE ### (1 line)
+    sess.run(model['input'].assign(input_image))
+    ### END CODE HERE ###
+    
+    for i in range(num_iterations):
+    
+        # Run the session on the train_step to minimize the total cost
+        ### START CODE HERE ### (1 line)
+        sess.run(train_step)
+        ### END CODE HERE ###
+        
+        # Compute the generated image by running the session on the current model['input']
+        ### START CODE HERE ### (1 line)
+        generated_image = sess.run(model['input'])
+        ### END CODE HERE ###
+
+        # Print every 20 iteration.
+        if i%20 == 0:
+            Jt, Jc, Js = sess.run([J, J_content, J_style])
+            print("Iteration " + str(i) + " :")
+            print("total cost = " + str(Jt))
+            print("content cost = " + str(Jc))
+            print("style cost = " + str(Js))
+            
+            # save current generated image in the "/output" directory
+            save_image("output/" + str(i) + ".png", generated_image)
+    
+    # save last generated image
+    save_image('output/generated_image.jpg', generated_image)
+    
+    return generated_image
+
+
+model_nn(sess, generated_image)
+>>>
+Iteration 0 :
+total cost = 5.05035e+09
+content cost = 7877.67
+style cost = 1.26257e+08
+Iteration 20 :
+total cost = 9.43272e+08
+content cost = 15187.2
+style cost = 2.3578e+07
+Iteration 40 :
+total cost = 4.84905e+08
+content cost = 16785.1
+style cost = 1.21184e+07
+
+
+
+
+Lets go through the individual steps in detail.
+\5 - Test With your own image (Optional/Ungraded)
+	1. Click on "File -> Open" in the upper tab of the notebook
+	2. Go to "/images" and upload your images (requirement: (WIDTH = 300, HEIGHT = 225)), rename them "my_content.png" and "my_style.png" for example.
+	3. Change the code in part (3.4) from :
+		content_image = scipy.misc.imread("images/louvre.jpg")
+		style_image = scipy.misc.imread("images/claude-monet.jpg")
+	to:
+		content_image = scipy.misc.imread("images/my_content.jpg")
+		style_image = scipy.misc.imread("images/my_style.jpg")
+	4. Rerun the cells (you may need to restart the Kernel in the upper tab of the notebook).
+
+You can also tune your hyperparameters:
+	- Which layers are responsible for representing the style? STYLE_LAYERS
+	- How many iterations do you want to run the algorithm? num_iterations
+	- What is the relative weighting between content and style? alpha/beta
+
+\6 - Conclusion
+"REMEMBER"
+	- Neural Style Transfer is an algorithm that given a content image C and a style image S can generate an artistic image
+	- It uses representations (hidden layer activations) based on a pretrained ConvNet.
+	- The content cost function is computed using one hidden layer's activations.
+	- The style cost function for one layer is computed using the Gram matrix of that layer's activations. The overall style cost function is obtained using several hidden layers.
+	- Optimizing the total cost function results in synthesizing new images.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------
 NOTEBOOK: FACE RECOGNITION FOR THE HAPPY HOUSE
+Many of the ideas presented here are from "FaceNet". In lecture, we also talked about "DeepFace".
+Face recognition problems commonly fall into two categories:
+	- Face Verification - "is this the claimed person?". For example, at some airports, you can pass through customs by letting a system scan your passport and then verifying that you (the person carrying the passport) are the correct person. A mobile phone that unlocks using your face is also using face verification. This is a 1:1 matching problem.
+	- Face Recognition - "who is this person?". For example, the video lecture showed a face recognition video (https://www.youtube.com/watch?v=wr4rx0Spihs) of Baidu employees entering the office without needing to otherwise identify themselves. This is a 1:K matching problem.
+
+"FACENET LEARNS A NEURAL NETWORK THAT ENCODES A FACE IMAGE INTO A VECTOR OF 128 NUMBERS. BY COMPARING TWO SUCH VECTORS, YOU CAN THEN DETERMINE IF TWO PICTURES ARE OF THE SAME PERSON."
+0 - Naive Face Verification
+1 - Encoding face images into a 128-dimensional vector
+	1.1 - Using an ConvNet to compute encodings
+	1.2 - The Triplet Loss
+2 - Loading the trained model
+3 - Applying the model
+	3.1 - Face Verification
+	3.2 - Face Recognition
+
+
+\0 - Naive Face Verification
+In Face Verification, you`re given two images and you have to tell if they are of the same person. The simplest way to do this is to compare the two images pixel-by-pixel. If the distance between the raw images are less than a chosen threshold, it may be the same person!
+Of course, this algorithm performs really poorly, since the pixel values change dramatically due to variations in lighting, orientation of the person`s face, even minor changes in head position, and so on.
+You`ll see that rather than using the raw image, you can learn an encoding f(img)f(img) so that element-wise comparisons of this encoding gives more accurate judgements as to whether two pictures are of the same person.
+
+
+\1 - Encoding face images into a 128-dimensional vector
+	\1.1 - Using an ConvNet to compute encodings
+#The key things you need to know are:
+	- This network uses 96x96 dimensional RGB images as its input. Specifically, inputs a face image (or batch of  mm  face images) as a tensor of shape  (m,nC,nH,nW)=(m,3,96,96)(m,nC,nH,nW)=(m,3,96,96) 
+	- It outputs a matrix of shape  (m,128)(m,128)  that encodes each input face image into a 128-dimensional vector
+#Run the cell below to create the model for face images.
+
+FRmodel = faceRecoModel(input_shape=(3, 96, 96))
+print("Total Params:", FRmodel.count_params())
+>>> Total Params: 3743280
+
+So, an encoding is a good one if:
+	-The encodings of two images of the same person are quite similar to each other
+	-The encodings of two images of different persons are very different
+
+The triplet loss function formalizes this, and tries to "push" the encodings of two images of the same person (Anchor and Positive) closer together, while "pulling" the encodings of two images of different persons (Anchor, Negative) further apart.
+
+
+
+	\1.2 - The Triplet Loss
+For an image  x , we denote its encoding  f(x) , where  f is the function computed by the neural network.
+Training will use triplets of images  (A,P,N)(A,P,N) :
+	A is an "Anchor" image--a picture of a person.
+	P is a "Positive" image--a picture of the same person as the Anchor image.
+	N is a "Negative" image--a picture of a different person than the Anchor image.
+
+You`d like to make sure that an image  A⁽ᶦ⁾  of an individual is closer to the Positive  P⁽ᶦ⁾  than to the Negative image  N⁽ᶦ⁾  by at least a margin  α :
+		∣∣f(A⁽ᶦ⁾)−f(P⁽ᶦ⁾)∣∣²₂ + α < ∣∣f(A⁽ᶦ⁾)−f(N⁽ᶦ⁾)∣∣²₂
+ 
+You would thus like to minimize the following "triplet cost":
+      m
+ʝ =   ∑   [  ∣∣f(A⁽ᶦ⁾)−f(P⁽ᶦ⁾)∣∣²₂ − ∣∣f(A⁽ᶦ⁾)−f(N⁽ᶦ⁾)∣∣²₂ + α ]₊		  ....(3)
+     i=1	        (1)						(2) 
+Here, we are using the notation " [z]₊ " to denote  max(z,0) .
+
+"NOTES":
+	- The term (1) is the squared distance between the anchor "A" and the positive "P" for a given triplet; you want this to be small.
+	- The term (2) is the squared distance between the anchor "A" and the negative "N" for a given triplet, you want this to be relatively large, so it thus makes sense to have a minus sign preceding it.
+	- α  is called the margin. It is a hyperparameter that you should pick manually. We will use  α=0.2
+
+∣∣ f(img)∣∣2 =1 
+
+
+# GRADED FUNCTION: triplet_loss
+      m
+ʝ =   ∑   [  ∣∣f(A⁽ᶦ⁾)−f(P⁽ᶦ⁾)∣∣²₂ − ∣∣f(A⁽ᶦ⁾)−f(N⁽ᶦ⁾)∣∣²₂ + α ]₊		  ....(3)
+     i=1	        (1)						(2) 
+def triplet_loss(y_true, y_pred, alpha = 0.2):
+    anchor, positive, negative = y_pred[0], y_pred[1], y_pred[2]
+    ### START CODE HERE ### (≈ 4 lines)
+    # Step 1: Compute the (encoding) distance between the anchor and the positive, you will need to sum over axis=-1
+    pos_dist = tf.reduce_sum(tf.square(tf.subtract(anchor,positive)),-1) 	....(1)	
+    # Step 2: Compute the (encoding) distance between the anchor and the negative, you will need to sum over axis=-1
+    neg_dist = tf.reduce_sum(tf.square(tf.subtract(anchor,negative)),-1) 	....(2) 
+    # Step 3: subtract the two previous distances and add alpha.
+    basic_loss = tf.add(tf.subtract(pos_dist,neg_dist),alpha) 				...... (1) - (2)  + α
+    # Step 4: Take the maximum of basic_loss and 0.0. Sum over the training examples.
+    loss = tf.reduce_sum(tf.maximum(basic_loss,0.0)) 						..... ∑ max()
+    ### END CODE HERE ###
+    
+    return loss
+
+
+\2 - Loading the trained model
+FRmodel.compile(optimizer = 'adam', loss = triplet_loss, metrics = ['accuracy'])
+load_weights_from_FaceNet(FRmodel)
+
+
+
+
+\3 - Applying the model
+So, you decide to change the door entry policy, and not just let random happy people enter anymore, even if they are happy! Instead, you`d like to build a Face verification system so as to only let people from a specified list come in. To get admitted, each person has to swipe an ID card (identification card) to identify themselves at the door. The face recognition system then checks that they are who they claim to be.
+	\3.1 - Face Verification
+#Let's build a database containing one encoding vector for each person allowed to enter the happy house. To generate the encoding we use img_to_encoding(image_path, model) which basically runs the forward propagation of the model on the specified image.
+
+#Run the following code to build the database (represented as a python dictionary). This database maps each person's name to a 128-dimensional encoding of their face.
+database = {}
+database["danielle"] = img_to_encoding("images/danielle.png", FRmodel)
+database["younes"] = img_to_encoding("images/younes.jpg", FRmodel)
+database["tian"] = img_to_encoding("images/tian.jpg", FRmodel)
+database["andrew"] = img_to_encoding("images/andrew.jpg", FRmodel)
+database["kian"] = img_to_encoding("images/kian.jpg", FRmodel)
+database["dan"] = img_to_encoding("images/dan.jpg", FRmodel)
+database["sebastiano"] = img_to_encoding("images/sebastiano.jpg", FRmodel)
+database["bertrand"] = img_to_encoding("images/bertrand.jpg", FRmodel)
+database["kevin"] = img_to_encoding("images/kevin.jpg", FRmodel)
+database["felix"] = img_to_encoding("images/felix.jpg", FRmodel)
+database["benoit"] = img_to_encoding("images/benoit.jpg", FRmodel)
+database["arnaud"] = img_to_encoding("images/arnaud.jpg", FRmodel)
+
+
+"Now, when someone shows up at your front door and swipes their ID card (thus giving you their name), you can look up their encoding in the database, and use it to check if the person standing at the front door matches the name on the ID."
+
+# GRADED FUNCTION: verify
+
+def verify(image_path, identity, database, model):
+    
+    # Step 1: Compute the encoding for the image. Use img_to_encoding() see example above. (≈ 1 line)
+    encoding = img_to_encoding(image_path,model)
+    
+    # Step 2: Compute distance with identity's image (≈ 1 line)
+    dist = np.linalg.norm(encoding - database[identity])
+    
+    # Step 3: Open the door if dist < 0.7, else don't open (≈ 3 lines)
+    if dist < 0.7:
+        print("It's " + str(identity) + ", welcome home!")
+        door_open = True
+    else:
+        print("It's not " + str(identity) + ", please go away")
+        door_open = False
+        
+    ### END CODE HERE ###
+        
+    return dist, door_open
+
+verify("images/camera_0.jpg", "younes", database, FRmodel)
+>>>
+It`s younes, welcome home!
+ (0.65939289, True)
+
+verify("images/camera_2.jpg", "kian", database, FRmodel)
+>>>
+It`s not kian, please go away
+(0.86224014, False)
+
+
+
+
+
+
+	\3.2 - Face Recognition
+Your face verification system is mostly working well. But since Kian got his ID card stolen, when he came back to the house that evening he couldn`t get in!
+To reduce such shenanigans, you`d like to change your face verification system to a face recognition system. This way, no one has to carry an ID card anymore. An authorized person can just walk up to the house, and the front door will unlock for them!
+
+You`ll implement a face recognition system that takes as input an image, and figures out if it is one of the authorized persons (and if so, who). Unlike the previous face verification system, we will no longer get a person`s name as another input.
+
+# GRADED FUNCTION: who_is_it
+
+def who_is_it(image_path, database, model):
+    ## Step 1: Compute the target "encoding" for the image. Use img_to_encoding() see example above. ## (≈ 1 line)
+    encoding = img_to_encoding(image_path,model)
+    
+    ## Step 2: Find the closest encoding ##
+    
+    # Initialize "min_dist" to a large value, say 100 (≈1 line)
+    min_dist = 100
+    
+    # Loop over the database dictionary's names and encodings.
+    for (name, db_enc) in database.items():
+        
+        # Compute L2 distance between the target "encoding" and the current "emb" from the database. (≈ 1 line)
+        dist = np.linalg.norm(encoding - db_enc)
+
+        # If this distance is less than the min_dist, then set min_dist to dist, and identity to name. (≈ 3 lines)
+        if dist < min_dist:
+            min_dist = dist
+            identity = name
+
+    ### END CODE HERE ###
+    
+    if min_dist > 0.7:
+        print("Not in the database.")
+    else:
+        print ("it's " + str(identity) + ", the distance is " + str(min_dist))
+        
+    return min_dist, identity
+
+who_is_it("images/camera_0.jpg", database, FRmodel)
+>>>
+it`s younes, the distance is 0.659393
+(0.65939289, 'younes')
+
+Your Happy House is running well. It only lets in authorized persons, and people don`t need to carry an ID card around anymore!
+You`ve now seen how a state-of-the-art face recognition system works.
+Although we won`t implement it here, here`re some ways to further improve the algorithm:
+	- Put more images of each person (under different lighting conditions, taken on different days, etc.) into the database. Then given a new image, compare the new face to multiple pictures of the person. This would increae accuracy.
+	- Crop the images to just contain the face, and less of the "border" region around the face. This preprocessing removes some of the irrelevant pixels around the face, and also makes the algorithm more robust.
+
+
+"REMEMBER"
+	- Face verification solves an easier 1:1 matching problem; face recognition addresses a harder 1:K matching problem.
+	- The triplet loss is an effective loss function for training a neural network to learn an encoding of a face image.
+	- The same encoding can be used for verification and recognition. Measuring distances between two images' encodings allows you to determine whether they are pictures of the same person.
+
+
 
 -----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------
