@@ -1,0 +1,67 @@
+"-------------------------------------------------------------------------------------------------------------------------RECURRENT NEURAL NETWORKS"
+Learn about recurrent neural networks. This type of model has been proven to perform extremely well on temporal data. It has several variants including LSTMs, GRUs and Bidirectional RNNs, which you are going to learn about in this section.
+
+Why sequence models
+Notation
+Recurrent Neural Network Model
+Backpropagation through time
+Different types of RNNs
+Language model and sequence generation
+Sampling novel sequences
+Vanishing gradients with RNNs
+Gated Recurrent Unit (GRU)
+Long Short Term Memory (LSTM)
+Bidirectional RNN
+Deep RNNs
+Notebook: Building a recurrent neural network - step by step
+Notebook: Dinosaur Island - Character-Level Language Modeling
+Notebook: Jazz improvisation with LSTM
+
+Graded: Recurrent Neural Networks
+Graded: Building a recurrent neural network - step by step
+Graded: Dinosaur Island - Character-Level Language Modeling
+Graded: Jazz improvisation with LSTM
+-------------------------------------------------------------------------------------------------------------------------
+"NATURAL LANGUAGE PROCESSING & WORD EMBEDDINGS"
+Natural language processing with deep learning is an important combination. Using word vector representations and embedding layers you can train recurrent neural networks with outstanding performances in a wide variety of industries. Examples of applications are sentiment analysis, named entity recognition and machine translation.
+
+Word Representation
+Using word embeddings
+Properties of word embeddings
+Embedding matrix
+Learning word embeddings
+Word2Vec
+Negative Sampling
+GloVe word vectors
+Sentiment Classification
+Debiasing word embeddings
+Notebook: Operations on word vectors - Debiasing
+Notebook: Emojify
+
+
+Graded: Natural Language Processing & Word Embeddings
+Graded: Operations on word vectors - Debiasing
+Graded: Emojify
+
+-------------------------------------------------------------------------------------------------------------------------
+"SEQUENCE MODELS & ATTENTION MECHANISM"
+Sequence models can be augmented using an attention mechanism. This algorithm will help your model understand where it should focus its attention given a sequence of inputs. This week, you will also learn about speech recognition and how to deal with audio data.
+
+Basic Models
+Picking the most likely sentence
+Beam Search
+Refinements to Beam Search
+Error analysis in beam search
+Bleu Score (optional)
+Attention Model Intuition
+Attention Model
+Speech recognition
+Trigger Word Detection
+Conclusion and thank you
+Notebook: Neural Machine Translation with Attention
+Notebook: Trigger word detection
+
+
+Graded: Sequence models & Attention mechanism
+Graded: Neural Machine Translation with Attention
+Graded: Trigger word detection

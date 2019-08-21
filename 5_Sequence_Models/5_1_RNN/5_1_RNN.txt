@@ -1,0 +1,253 @@
+-------------------------------------------------------------------------------------------------------------------------
+"RECURRENT NEURAL NETWORKS"
+Learn about recurrent neural networks. This type of model has been proven to perform extremely well on temporal data. It has several variants including LSTMs, GRUs and Bidirectional RNNs, which you are going to learn about in this section.
+
+Why sequence models
+Notation
+Recurrent Neural Network Model
+Backpropagation through time
+Different types of RNNs
+Language model and sequence generation
+Sampling novel sequences
+Vanishing gradients with RNNs
+Gated Recurrent Unit (GRU)
+Long Short Term Memory (LSTM)
+Bidirectional RNN
+Deep RNNs
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+@NOTEBOOK: BUILDING A RECURRENT NEURAL NETWORK - STEP BY STEP
+1 - Forward propagation for the basic Recurrent Neural Network
+	1.1 - RNN cell
+	1.2 - RNN forward pass
+2 - Long Short-Term Memory (LSTM) network
+	2.1 - LSTM cell
+	2.2 - Forward pass for LSTM
+3 - Backpropagation in recurrent neural networks (OPTIONAL / UNGRADED)
+	3.1 - Basic RNN backward pass
+	3.2 - LSTM backward pass
+		3.2.1 One Step backward
+		3.2.2 gate derivatives
+		3.2.3 parameter derivatives
+	3.3 Backward pass through the LSTM RNN
+
+rnn_cell_forward()
+rnn_forward()
+lstm_cell_forward()
+lstm_forward()
+
+\1 - Forward propagation for the basic Recurrent Neural Network
+Figure 1: Basic RNN model
+Steps:
+	- Implement the calculations needed for one time-step of the RNN.
+	- Implement a loop over  TxTx  time-steps in order to process all the inputs, one at a time.
+
+	\1.1 - RNN cell
+Figure 2: Basic RNN cell. Takes as input  x⟨t⟩  (current input) and  a⟨t−1⟩  (previous hidden state containing information From the past), and outputs  a⟨t⟩ which is given to the next RNN cell and also used to predict  y⟨t⟩
+1. Compute the hidden state with tanh activation:  a⟨t⟩=tanh(Waaa⟨t−1⟩+Waxx⟨t⟩+ba)a⟨t⟩=tanh⁡(Waaa⟨t−1⟩+Waxx⟨t⟩+ba) .
+2. Using your new hidden state  a⟨t⟩a⟨t⟩ , compute the prediction  ŷ ⟨t⟩=softmax(Wyaa⟨t⟩+by)y^⟨t⟩=softmax(Wyaa⟨t⟩+by) . We provided you a function: softmax.
+3. Store  (a⟨t⟩,a⟨t−1⟩,x⟨t⟩,parameters)(a⟨t⟩,a⟨t−1⟩,x⟨t⟩,parameters)  in cache
+4. Return  a⟨t⟩a⟨t⟩  ,  y⟨t⟩y⟨t⟩  and cache
+
+# GRADED FUNCTION: rnn_cell_forward
+
+def rnn_cell_forward(xt, a_prev, parameters):
+    # Retrieve parameters from "parameters"
+    Wax = parameters["Wax"]
+    Waa = parameters["Waa"]
+    Wya = parameters["Wya"]
+    ba = parameters["ba"]
+    by = parameters["by"]
+    
+    ### START CODE HERE ### (≈2 lines)
+    # compute next activation state using the formula given above
+    #a⟨t⟩=tanh(Waa a⟨t−1⟩+Waxx⟨t⟩+ba)
+    a_next = np.tanh((Waa@a_prev)+(Wax@xt + ba))
+    # compute output of the current cell using the formula given above
+    #ŷ ⟨t⟩=softmax(Wyaa⟨t⟩+by)
+    yt_pred = softmax(Wya @ a_next + by)   
+    ### END CODE HERE ###
+    
+    # store values you need for backward propagation in cache
+    cache = (a_next, a_prev, xt, parameters)
+    return a_next, yt_pred, cache
+
+
+
+	\1.2 - RNN forward pass
+Figure 3: Basic RNN. The input sequence  x=(x⟨1⟩,x⟨2⟩,...,x⟨Tx⟩)  is carried over  Tx  time steps. The network outputs  y=(y⟨1⟩,y⟨2⟩,...,y⟨Tx⟩)
+# GRADED FUNCTION: rnn_forward
+
+def rnn_forward(x, a0, parameters):
+    # Initialize "caches" which will contain the list of all caches
+    caches = []
+    
+    # Retrieve dimensions from shapes of x and parameters["Wya"]
+    n_x, m, T_x = x.shape
+    n_y, n_a = parameters["Wya"].shape
+    
+    ### START CODE HERE ###
+    
+    # initialize "a" and "y" with zeros (≈2 lines)
+    a = np.zeros((n_a, m, T_x))
+    y_pred = np.zeros((n_y, m, T_x))
+    
+    # Initialize a_next (≈1 line)
+    a_next = a0
+    
+    # loop over all time-steps
+    for t in range(T_x):
+        # Update next hidden state, compute the prediction, get the cache (≈1 line)
+        a_next, yt_pred, cache = rnn_cell_forward(x[:,:,t], a_next, parameters)
+        # Save the value of the new "next" hidden state in a (≈1 line)
+        a[:,:,t] = a_next
+        # Save the value of the prediction in y (≈1 line)
+        y_pred[:,:,t] = yt_pred
+        # Append "cache" to "caches" (≈1 line)
+        caches.append(cache)
+        
+    ### END CODE HERE ###
+    
+    # store values needed for backward propagation in cache
+    caches = (caches, x)
+    
+    return a, y_pred, caches
+
+
+
+
+ "You've successfully built the forward propagation of a recurrent neural network from scratch. This will work well enough for some applications, but it suffers from vanishing gradient problems. So it works best when each output  y⟨t⟩y⟨t⟩  can be estimated using mainly "local" context (meaning information from inputs  x⟨t′⟩x⟨t′⟩  where  t′t′  is not too far from  tt )."
+
+"In the next part, you will build a more complex LSTM model, which is better at addressing vanishing gradients. The LSTM will be better able to remember a piece of information and keep it saved for many timesteps."
+
+
+\2 - Long Short-Term Memory (LSTM) network
+Figure 4: LSTM-cell. This tracks and updates a "cell state" or memory variable  c⟨t⟩  at every time-step, which can be different from  a⟨t⟩ .
+	\2.1 - LSTM cell
+# GRADED FUNCTION: lstm_cell_forward
+
+def lstm_cell_forward(xt, a_prev, c_prev, parameters):
+
+    # Retrieve parameters from "parameters"
+    Wf = parameters["Wf"]
+    bf = parameters["bf"]
+    Wi = parameters["Wi"]
+    bi = parameters["bi"]
+    Wc = parameters["Wc"]
+    bc = parameters["bc"]
+    Wo = parameters["Wo"]
+    bo = parameters["bo"]
+    Wy = parameters["Wy"]
+    by = parameters["by"]
+    
+    # Retrieve dimensions from shapes of xt and Wy
+    n_x, m = xt.shape
+    n_y, n_a = Wy.shape
+
+    ### START CODE HERE ###
+    # Concatenate a_prev and xt (≈3 lines)
+    concat = np.zeros((n_a + n_x, m))
+    concat[: n_a, :] = a_prev
+    concat[n_a :, :] = xt
+
+    # Compute values for ft, it, cct, c_next, ot, a_next using the formulas given figure (4) (≈6 lines)
+    ft = sigmoid(np.dot(Wf, concat) + bf)
+    it = sigmoid(np.dot(Wi, concat) + bi)
+    cct = np.tanh(np.dot(Wc, concat) + bc)
+    c_next = ft * c_prev + it * cct
+    ot = sigmoid(np.dot(Wo, concat) + bo)
+    a_next = ot * np.tanh(c_next)
+    
+    # Compute prediction of the LSTM cell (≈1 line)
+    yt_pred = softmax(np.dot(Wy, a_next) + by)
+    ### END CODE HERE ###
+
+    # store values needed for backward propagation in cache
+    cache = (a_next, c_next, a_prev, c_prev, ft, it, cct, ot, xt, parameters)
+
+    return a_next, c_next, yt_pred, cache
+
+	\2.2 - Forward pass for LSTM
+# GRADED FUNCTION: lstm_forward
+
+def lstm_forward(x, a0, parameters):
+    # Initialize "caches", which will track the list of all the caches
+    caches = []
+    
+    ### START CODE HERE ###
+    # Retrieve dimensions from shapes of x and parameters['Wy'] (≈2 lines)
+    n_x, m, T_x = x.shape
+    n_y, n_a = parameters["Wy"].shape
+    
+    # initialize "a", "c" and "y" with zeros (≈3 lines)
+    a = np.zeros((n_a, m, T_x))
+    c = np.zeros((n_a, m, T_x))
+    y = np.zeros((n_y, m, T_x))
+    
+    # Initialize a_next and c_next (≈2 lines)
+    a_next = a0
+    c_next = np.zeros(a_next.shape)
+    
+    # loop over all time-steps
+    for t in range(T_x):
+        # Update next hidden state, next memory state, compute the prediction, get the cache (≈1 line)
+        a_next, c_next, yt, cache = lstm_cell_forward(x[:, :, t], a_next, c_next, parameters)
+        # Save the value of the new "next" hidden state in a (≈1 line)
+        a[:,:,t] = a_next
+        # Save the value of the prediction in y (≈1 line)
+        y[:,:,t] = yt
+        # Save the value of the next cell state (≈1 line)
+        c[:,:,t]  = c_next
+        # Append the cache into caches (≈1 line)
+        caches.append(cache)
+        
+    ### END CODE HERE ###
+    
+    # store values needed for backward propagation in cache
+    caches = (caches, x)
+
+    return a, y, c, caches
+
+
+
+\3 - Backpropagation in recurrent neural networks (OPTIONAL / UNGRADED)
+	\3.1 - Basic RNN backward pass
+	\3.2 - LSTM backward pass
+		\3.2.1 One Step backward
+		\3.2.2 gate derivatives
+		\3.2.3 parameter derivatives
+	\3.3 Backward pass through the LSTM RNN
+
+
+
+Basic_RNN_Cell_rnn_step_forward
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+@Notebook: Dinosaur Island - Character-Level Language Modeling
+
+By completing this assignment you will learn:
+	- How to store text data for processing using an RNN
+	- How to synthesize data, by sampling predictions at each time step and passing it to the next RNN-cell unit
+	- How to build a character-level text generation recurrent neural network
+	- Why clipping the gradients is important
+
+
+
+
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+Notebook: Jazz improvisation with LSTM
+
+Graded: Recurrent Neural Networks
+Graded: Building a recurrent neural network - step by step
+Graded: Dinosaur Island - Character-Level Language Modeling
+Graded: Jazz improvisation with LSTM
