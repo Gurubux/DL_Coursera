@@ -1,0 +1,22 @@
+	-------------------------------------------------------------------------------------------------------------------------
+"SEQUENCE MODELS & ATTENTION MECHANISM"
+Sequence models can be augmented using an attention mechanism. This algorithm will help your model understand where it should focus its attention given a sequence of inputs. This week, you will also learn about speech recognition and how to deal with audio data.
+
+Basic Models
+Picking the most likely sentence
+Beam Search
+Refinements to Beam Search
+Error analysis in beam search
+Bleu Score (optional)
+Attention Model Intuition
+Attention Model
+Speech recognition
+Trigger Word Detection
+Conclusion and thank you
+Notebook: Neural Machine Translation with Attention
+Notebook: Trigger word detection
+
+
+Graded: Sequence models & Attention mechanism
+Graded: Neural Machine Translation with Attention
+Graded: Trigger word detection
