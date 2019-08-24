@@ -61,3 +61,74 @@ certificate
 
 https://www.coursera.org/account/accomplishments/records/NGQDFUSYFWLR
 https://www.coursera.org/account/accomplishments/certificate/NGQDFUSYFWLR
+
+
+
+KEY POINTS
+W1
+Train/dev/test
+98/1/1
+Bias/Variance
+Bayesian-Optimal-Error
+Trade-off
+Overfitting
+Regularization
+L2-Ridge
+L1-Lasso
+Frobenius-norm
+Weight-decay
+Lambda-λ
+λ↑=w↓=z↓
+Dropout
+Augmentation
+Early-Stopping
+Orthogonalization
+Scaling
+Normalization
+Contours
+Vanishing-Exploding-Gradients
+Weight-initialization
+Numerical-Approximation
+Gradient-Checking
+Eucledian-Distance
+
+
+W2
+Batch
+MiniBatch
+SGD
+Momentum
+RMSprop
+AdamOptimizer
+Exponentially-Weighted-Avg
+Bias-Correction
+LearningRate-decay
+
+
+W3
+Hyperparameter-tuning
+Confonets
+Resnets
+Vision
+Pandas-Caviar
+Batch-Normalization
+Covariate-shape
+Softmax-Regression
+Frameworks
+Caffe
+Keras
+Paddle
+CNTK
+Lasagne
+Tensorflow
+Theano
+PyTorch
+DL4j
+
+
+
+
+Notebook: Initialization
+Notebook: Regularization
+Notebook: Gradient Checking
+Notebook: Tensorflow

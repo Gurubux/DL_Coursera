@@ -66,3 +66,61 @@ Notebook: Trigger word detection
 Graded: Sequence models & Attention mechanism
 Graded: Neural Machine Translation with Attention
 Graded: Trigger word detection
+
+
+KEY POINTS
+W1
+Sequence
+Recurrent Neural Network
+RNN
+Vocabulary
+Dictionary
+UNK
+NamedEntityRecognition
+SharesParameters
+Uni-directional
+BRNs
+MxM-1xM-Mx1-MxN
+LanguageModeling
+SpeechRecognition
+Tokenize
+EOS
+Sampling
+CharacterLevel
+SequenceGeneration
+Long-Term-Dependencies
+Exploding-Gradient
+Vanishing-Gradient
+GradientClipping
+GatedRecurrentNetworks-GRN
+MemoryCell-C
+LSTM
+Bidirectional-RNN
+DeepRNN
+WordEmbedding
+NaturalLanguageModel
+Embedding_Matrix
+Context-Target_pairs
+SkipGram
+NegativeSampling
+GloVe
+SentimentClassification
+Debiasing
+Neutralize
+Equalization
+TriggerWordDetection
+Encoder
+Decoder
+MachineTranslation
+BeamSearch
+AttentionModel
+MostLikely
+ConditionalLanguageModel
+GreedySearch
+ErrorAnalysis
+CTC-ConnectionistTemporalC
+Chime
+"ACTIVATE"
+
+W2
+W3

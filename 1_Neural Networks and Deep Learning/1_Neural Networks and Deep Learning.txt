@@ -100,3 +100,57 @@ Programming Assignments
 	@Programming Assignment: Building your deep neural network: Step by Step
 	Notebook: Deep Neural Network - Application
 	@Programming Assignment: Deep Neural Network Application
+
+
+
+KEY POINTS
+W1 
+Neuron
+Activation-Functions
+Neural-Networks
+ReLu
+NN-Figures-Out-itself
+Standard-NN
+CNN
+RNN
+Hybrid
+Structured
+UnStructured
+Why-NN-?
+Large-Amount-of-Data
+High-Computation-capabilities
+Better-Algorithms
+
+W2
+Forward-Propagation
+Backward-Propagation
+Loss-Function
+Log
+Sigmoid
+No-For-Loop
+Vectorization
+W-and-B
+Cost
+Reduce-Loss
+Gradient-Descent
+Convex-function
+Global-optiima
+Derivatives
+Slope
+Learning-Rate-α
+Calculus
+Computation-graph
+Local-optima
+
+
+W3
+SIMD
+GPU
+CPU
+Parallelism
+Broadcasting
+Numpy
+Leaky-Relu
+tanh
+Hyperparameters
+W4

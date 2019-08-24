@@ -185,7 +185,7 @@ The main steps For building a Neural Network are:
 
 
 There are two steps to computing predictions:
-	Calculate  Ŷ =A=σ(wTX+b)Y^=A=σ(wTX+b) 
+	Calculate  Ŷ =A=σ(wTX+b)
 	Convert the entries of a into 0 (if activation <= 0.5) or 1 (if activation > 0.5), stores the predictions in a vector Y_prediction. If you wish, you can use an if/else statement in a for loop (though there is also a way to vectorize this).
 
 

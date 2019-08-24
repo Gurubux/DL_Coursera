@@ -4,7 +4,7 @@
 WHY ML STRATEGY
 
 Improving Accuracy of ML Algo
-"https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/3_Structuring_Machine_Learning_Projects/ImprovingAccuracyMLAlgo.PNG"
+"https://raw.githubusercontent.com/Gurubux/DL_Coursera/master/3_Structuring_Machine_Learning_Projects/w1_1_ImprovingAccuracyMLAlgo.PNG"
 --------------------------------------------------------------------------------------------------------------------------
 ORTHOGONALIZATION
 90 degree
@@ -193,8 +193,39 @@ VIDEO - RUSLAN SALAKHUTDINOV
 
 
 
+KEY POINTS
+W1
+ML-Strategy
+Orthogonalization
+Precision
+Accuracy
+Recall
+F1-score
+2/(1/P)+(1/R)
+harmonic-mean
+train/dev/test
+Optimizing
+Satisfying
+dev/test_Same_Dist
+70/30
+60/20/20
+Classification-error
+Human-level
+Bayes-optimal-error
+Avaoidable-bias
+Avoidable_bias--Human-TrainError
+Variance--Train-DevError
+Train-DevError--MoreData-Regularization
+Human-TrainError--Adam_Rms_Momentum
 
-
+W2
+Parallel
+CleanUp
+Train/test_Different_Dist
+Data_Mismatch-Error
+TransferLearning
+Multi-TaskLearning
+Flight-Simulator
 
 
 
