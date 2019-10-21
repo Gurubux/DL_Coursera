@@ -291,6 +291,15 @@ model.fit([Xoh, s0, c0], outputs, epochs=1, batch_size=100)
 Epoch 1/1
 10000/10000 [==============================] - 38s - loss: 16.4747 - dense_5_loss_1: 1.2802 - dense_5_loss_2: 1.0292 - dense_5_loss_3: 1.7165 - dense_5_loss_4: 2.6735 - dense_5_loss_5: 0.7765 - dense_5_loss_6: 1.2497 - dense_5_loss_7: 2.6822 - dense_5_loss_8: 0.8416 - dense_5_loss_9: 1.6894 - dense_5_loss_10: 2.5358 - dense_5_acc_1: 0.4733 - dense_5_acc_2: 0.6892 - dense_5_acc_3: 0.3079 - dense_5_acc_4: 0.0785 - dense_5_acc_5: 0.9138 - dense_5_acc_6: 0.3616 - dense_5_acc_7: 0.0610 - dense_5_acc_8: 0.9650 - dense_5_acc_9: 0.2271 - dense_5_acc_10: 0.0950    
 
+Total params: 52,960
+Trainable params: 52,960
+Non-trainable params: 0
+bidirectional_1's output shape  (None, 30, 64)
+repeat_vector_1's output shape  (None, 30, 64)
+concatenate_1's output shape  (None, 30, 128)
+attention_weights's output shape  (None, 30, 1)
+dot_1's output shape  (None, 1, 64)
+dense_3's output shape  (None, 11)
 
 
 \3 - Visualizing Attention!(OPTIONAL/UNGRADED)
